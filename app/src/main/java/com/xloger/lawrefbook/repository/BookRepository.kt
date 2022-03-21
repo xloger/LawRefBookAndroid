@@ -14,7 +14,7 @@ class BookRepository(
     val asset: AssetManager
 ) {
 
-    private val baseDirName = "法律法规"
+    private val baseDirName = "Laws"
 
     fun getSingleDoc(doc: Doc) : String {
         return asset.open(doc.path).bufferedReader().use { it.readText() }

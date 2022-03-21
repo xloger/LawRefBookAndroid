@@ -37,7 +37,7 @@ class LawReaderFragment : Fragment() {
         initView()
 
         val bookRepository = BookRepository(requireContext().assets)
-        val testDoc = Doc("刑法", "法律法规/刑法/刑法.md", setOf())
+        val testDoc = Doc("刑法", "Laws/刑法/刑法.md", setOf())
         val law = bookRepository.getSingleLaw(testDoc)
         lawReaderAdapter.setList(tranLaw(law))
     }
