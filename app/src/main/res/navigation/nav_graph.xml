@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/previewFragment"
+    app:startDestination="@id/lawReaderFragment"
     >
 
     <fragment
@@ -13,6 +13,11 @@
     <fragment
         android:id="@+id/previewFragment"
         android:name="com.xloger.lawrefbook.ui.preview.PreviewFragment"
+        />
+
+    <fragment
+        android:id="@+id/lawReaderFragment"
+        android:name="com.xloger.lawrefbook.ui.lawreader.LawReaderFragment"
         />
 
 </navigation>

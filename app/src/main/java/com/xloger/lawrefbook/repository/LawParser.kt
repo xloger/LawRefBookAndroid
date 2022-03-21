@@ -55,6 +55,7 @@ class LawParser {
                     val item = Law.Item("", currentContent.toString())
                     getCurrentGroup(baseGroup, hLevel).itemList.add(item)
                     currentContent.clear()
+                    currentContent.append(content).append("\n")
                 } else {
                     currentContent.append(content).append("\n")
                 }

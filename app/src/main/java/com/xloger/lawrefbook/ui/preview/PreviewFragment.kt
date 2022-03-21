@@ -13,10 +13,6 @@ import com.xloger.lawrefbook.ui.preview.weight.BookMenuDialog
 
 class PreviewFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = PreviewFragment()
-    }
-
     private var _binding: PreviewFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -34,11 +30,12 @@ class PreviewFragment : Fragment() {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(PreviewViewModel::class.java)
         initView()
     }
+
 
     private fun initView() {
         val bookRepository = BookRepository(requireContext().assets)
