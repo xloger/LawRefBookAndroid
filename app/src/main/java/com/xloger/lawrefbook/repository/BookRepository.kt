@@ -1,8 +1,8 @@
 package com.xloger.lawrefbook.repository
 
 import android.content.res.AssetManager
-import android.util.Log
 import com.xloger.lawrefbook.repository.entity.Doc
+import com.xloger.lawrefbook.repository.entity.Law
 import com.xloger.lawrefbook.repository.entity.LawRefContainer
 
 /**
@@ -20,8 +20,13 @@ class BookRepository(
         return asset.open(doc.path).bufferedReader().use { it.readText() }
     }
 
-    fun getTypeName() : List<String> {
-        return asset.list(baseDirName)?.toList() ?: emptyList()
+    fun getSingleLaw(doc: Doc): Law {
+        val parser = LawParser()
+        parser.start()
+        asset.open(doc.path).bufferedReader().forEachLine {
+            parser.putLine(it)
+        }
+        return parser.endAndGet()
     }
 
 

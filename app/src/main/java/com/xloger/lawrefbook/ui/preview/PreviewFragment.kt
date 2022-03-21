@@ -1,12 +1,11 @@
 package com.xloger.lawrefbook.ui.preview
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.xloger.lawrefbook.databinding.PreviewFragmentBinding
 import com.xloger.lawrefbook.repository.BookRepository
 import com.xloger.lawrefbook.repository.entity.Doc
@@ -44,6 +43,10 @@ class PreviewFragment : Fragment() {
     private fun initView() {
         val bookRepository = BookRepository(requireContext().assets)
         val lawRefContainer = bookRepository.getLawRefContainer()
+        val testDoc = Doc("刑法", "法律法规/刑法/刑法.md", setOf())
+        binding.content.text = bookRepository.getSingleDoc(testDoc)
+        bookRepository.getSingleLaw(testDoc)
+
         binding.menuFab.setOnClickListener {
             bookMenuDialog.apply {
                 create()
@@ -51,6 +54,7 @@ class PreviewFragment : Fragment() {
                 listener = object : BookMenuDialog.EventListener {
                     override fun onItemClick(doc: Doc) {
                         binding.content.text = bookRepository.getSingleDoc(doc)
+                        bookRepository.getSingleLaw(doc)
                         dismiss()
                     }
                 }
