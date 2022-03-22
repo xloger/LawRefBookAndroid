@@ -13,6 +13,8 @@ import com.xloger.lawrefbook.repository.BookRepository
 import com.xloger.lawrefbook.repository.entity.Doc
 import com.xloger.lawrefbook.repository.entity.Law
 import com.xloger.lawrefbook.ui.lawreader.entity.LawGroupNode
+import com.xloger.lawrefbook.ui.lawreader.weight.lawmenu.LawMenuDialog
+import com.xloger.lawrefbook.util.XLog
 
 class LawReaderFragment : Fragment() {
 
@@ -20,6 +22,7 @@ class LawReaderFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val lawReaderAdapter by lazy { LawReaderAdapter() }
+    private val lawMenuDialog by lazy { LawMenuDialog(requireContext()) }
 
     private lateinit var viewModel: LawReaderViewModel
 
@@ -36,17 +39,37 @@ class LawReaderFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(LawReaderViewModel::class.java)
         initView()
 
+
+    }
+
+    private fun initView() {
         val bookRepository = BookRepository(requireContext().assets)
         val testDoc = Doc("刑法", "Laws/刑法/刑法.md", setOf())
         val law = bookRepository.getSingleLaw(testDoc)
         lawReaderAdapter.setList(tranLaw(law))
-    }
-
-    private fun initView() {
 
         binding.lawRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = lawReaderAdapter
+        }
+        binding.lawMenuFab.apply {
+            setOnClickListener {
+                lawMenuDialog.apply {
+                    create()
+                    show()
+                    syncContainer(law)
+                    listener = object : LawMenuDialog.EventListener {
+                        override fun onMenuClick(group: Law.Group) {
+//                            Toast.makeText(requireContext(), "${group.title}", Toast.LENGTH_SHORT).show()
+
+                            val index = lawReaderAdapter.data.indexOfFirst { (it as? LawGroupNode)?.group?.title == group.title }
+                            XLog.d("index:$index")
+                            binding.lawRecyclerView.scrollToPosition(index)
+                            dismiss()
+                        }
+                    }
+                }
+            }
         }
     }
 

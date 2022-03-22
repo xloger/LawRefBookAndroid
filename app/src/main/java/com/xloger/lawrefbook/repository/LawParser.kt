@@ -28,41 +28,31 @@ class LawParser {
     fun putLine(content: String) {
         when {
             content.isBlank() -> return
-//            content.startsWith("# ") -> {
-//                title = content.removePrefix("# ")
-//                status = Status.Title
-//            }
-//            (status == Status.Title || status == Status.Desc) && !content.startsWith("#") -> {
-//                desc.append(content)
-//                desc.append("\n")
-//                status = Status.Desc
-//            }
-//            content == "<!-- INFO END -->" -> {
-//                status = Status.Group
-//            }
-//            content.startsWith("#") -> {
-//                XLog.d("startsWith：$content")
-//            }
             content.matches("#+ .*".toRegex()) -> {
-                XLog.d("符合条件的：$content")
+                checkPutItem()
                 hLevel = content.count { it == '#' }
                 val hTitle = content.replace("#+ ".toRegex(), "")
                 val group = Law.Group(hLevel, hTitle, mutableListOf(), mutableListOf())
                 getCurrentGroup(baseGroup, hLevel - 1).groupList.add(group)
             }
-            content.startsWith("第") -> {
-                if (currentContent.isNotBlank()) {
-                    val item = Law.Item("", currentContent.toString())
-                    getCurrentGroup(baseGroup, hLevel).itemList.add(item)
-                    currentContent.clear()
-                    currentContent.append(content).append("\n")
-                } else {
-                    currentContent.append(content).append("\n")
-                }
+            content.matches("第.+条 .*".toRegex()) -> {
+                checkPutItem()
+                currentContent.append(content).append("\n")
             }
             else -> {
                 currentContent.append(content).append("\n")
             }
+        }
+    }
+
+    /**
+     * 如果当前存在可以提交的 Item，则提交
+     */
+    private fun checkPutItem() {
+        if (currentContent.isNotBlank()) {
+            val item = Law.Item("", currentContent.toString())
+            getCurrentGroup(baseGroup, hLevel).itemList.add(item)
+            currentContent.clear()
         }
     }
 
