@@ -2,6 +2,7 @@ package com.xloger.lawrefbook.ui.preview.weight
 
 import com.chad.library.adapter.base.BaseNodeAdapter
 import com.chad.library.adapter.base.entity.node.BaseNode
+import com.xloger.lawrefbook.repository.entity.Doc
 import com.xloger.lawrefbook.ui.preview.weight.entity.GroupNode
 import com.xloger.lawrefbook.ui.preview.weight.entity.ItemNode
 import com.xloger.lawrefbook.ui.preview.weight.provider.GroupProvider
@@ -13,12 +14,12 @@ import com.xloger.lawrefbook.ui.preview.weight.provider.ItemProvider
  * Email:phoenix@xloger.com
  */
 class BookMenuAdapter(
-    onItemClick: (item: ItemNode) -> Unit
 ) : BaseNodeAdapter() {
+    var listener: EventListener? = null
 
     init {
         addNodeProvider(GroupProvider())
-        addNodeProvider(ItemProvider(onItemClick))
+        addNodeProvider(ItemProvider({ item -> listener?.onItemClick(item.doc) }))
     }
 
     override fun getItemType(data: List<BaseNode>, position: Int): Int {
@@ -27,5 +28,9 @@ class BookMenuAdapter(
             is ItemNode -> 2
             else -> -1
         }
+    }
+
+    interface EventListener {
+        fun onItemClick(doc: Doc)
     }
 }

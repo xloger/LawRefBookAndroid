@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.entity.node.BaseNode
 import com.xloger.lawrefbook.databinding.LawReaderFragmentBinding
 import com.xloger.lawrefbook.repository.BookRepository
-import com.xloger.lawrefbook.repository.entity.Doc
 import com.xloger.lawrefbook.repository.entity.Law
 import com.xloger.lawrefbook.ui.lawreader.entity.LawGroupNode
 import com.xloger.lawrefbook.ui.lawreader.weight.lawmenu.LawMenuDialog
@@ -44,8 +43,8 @@ class LawReaderFragment : Fragment() {
 
     private fun initView() {
         val bookRepository = BookRepository(requireContext().assets)
-        val testDoc = Doc("刑法", "Laws/刑法/刑法.md", setOf())
-        val law = bookRepository.getSingleLaw(testDoc)
+        val docPath = arguments?.getString("docPath") ?: "Laws/刑法/刑法.md"
+        val law = bookRepository.getSingleLaw(docPath)
         lawReaderAdapter.setList(tranLaw(law))
 
         binding.lawRecyclerView.apply {

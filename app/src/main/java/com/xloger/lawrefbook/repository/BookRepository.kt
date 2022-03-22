@@ -29,12 +29,23 @@ class BookRepository(
         return parser.endAndGet()
     }
 
+    fun getSingleLaw(path: String): Law {
+        val parser = LawParser()
+        parser.start()
+        asset.open(path).bufferedReader().forEachLine {
+            parser.putLine(it)
+        }
+        return parser.endAndGet()
+    }
+
 
     fun getLawRefContainer() : LawRefContainer {
         val groupList = mutableListOf<LawRefContainer.Group>()
         asset.list(baseDirName)?.forEach { path ->
+            if (path.contains(".")) return@forEach
             val docList = mutableListOf<Doc>()
-            asset.list("$baseDirName/$path")?.forEach { docName ->
+            asset.list("$baseDirName/$path")?.forEach doc@ { docName ->
+                if (docName.startsWith("_")) return@doc
                 val doc = Doc(docName.removeSuffix(".md"), "$baseDirName/$path/$docName", setOf(Doc.Tag(path)))
                 docList.add(doc)
             }

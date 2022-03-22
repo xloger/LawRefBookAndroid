@@ -4,21 +4,29 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.chad.library.adapter.base.entity.node.BaseNode
+import com.xloger.lawrefbook.R
 import com.xloger.lawrefbook.databinding.PreviewFragmentBinding
 import com.xloger.lawrefbook.repository.BookRepository
 import com.xloger.lawrefbook.repository.entity.Doc
-import com.xloger.lawrefbook.ui.preview.weight.BookMenuDialog
+import com.xloger.lawrefbook.repository.entity.LawRefContainer
+import com.xloger.lawrefbook.ui.preview.weight.BookMenuAdapter
+import com.xloger.lawrefbook.ui.preview.weight.entity.GroupNode
+import com.xloger.lawrefbook.ui.preview.weight.entity.ItemNode
 
 class PreviewFragment : Fragment() {
 
     private var _binding: PreviewFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val bookMenuDialog: BookMenuDialog by lazy {
-        BookMenuDialog(requireContext())
-    }
+
+    private val menuAdapter by lazy { BookMenuAdapter() }
+
 
     private lateinit var viewModel: PreviewViewModel
 
@@ -40,24 +48,25 @@ class PreviewFragment : Fragment() {
     private fun initView() {
         val bookRepository = BookRepository(requireContext().assets)
         val lawRefContainer = bookRepository.getLawRefContainer()
-        val testDoc = Doc("刑法", "Laws/刑法/刑法.md", setOf())
-        binding.content.text = bookRepository.getSingleDoc(testDoc)
-        bookRepository.getSingleLaw(testDoc)
 
-        binding.menuFab.setOnClickListener {
-            bookMenuDialog.apply {
-                create()
-                show()
-                listener = object : BookMenuDialog.EventListener {
-                    override fun onItemClick(doc: Doc) {
-                        binding.content.text = bookRepository.getSingleDoc(doc)
-                        bookRepository.getSingleLaw(doc)
-                        dismiss()
-                    }
-                }
-                syncContainer(lawRefContainer)
+        binding.menuRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = menuAdapter
+        }
+        menuAdapter.setList(tranContainer(lawRefContainer))
+        menuAdapter.listener = object : BookMenuAdapter.EventListener {
+            override fun onItemClick(doc: Doc) {
+                findNavController().navigate(R.id.lawReaderFragment, bundleOf("docPath" to doc.path))
             }
         }
+    }
+
+    private fun tranContainer(lawRefContainer: LawRefContainer) : List<BaseNode> {
+        val list = mutableListOf<BaseNode>()
+        lawRefContainer.groupList.forEach { group ->
+            list.add(GroupNode(group.tag, group.docList.map { ItemNode(it) }))
+        }
+        return list
     }
 
     override fun onDestroyView() {

@@ -6,11 +6,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.entity.node.BaseNode
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.xloger.lawrefbook.databinding.DialogMenuBookBinding
-import com.xloger.lawrefbook.repository.entity.Doc
 import com.xloger.lawrefbook.repository.entity.LawRefContainer
 import com.xloger.lawrefbook.ui.preview.weight.entity.GroupNode
 import com.xloger.lawrefbook.ui.preview.weight.entity.ItemNode
-import com.xloger.lawrefbook.util.XLog
 
 /**
  * Created on 2022/3/20 16:11.
@@ -20,10 +18,9 @@ import com.xloger.lawrefbook.util.XLog
 class BookMenuDialog(
     context: Context
 ) : BottomSheetDialog(context) {
-    var listener: EventListener? = null
 
     private lateinit var binding: DialogMenuBookBinding
-    private val menuAdapter by lazy { BookMenuAdapter({ item -> listener?.onItemClick(item.doc) }) }
+    private val menuAdapter by lazy { BookMenuAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +48,4 @@ class BookMenuDialog(
         return list
     }
 
-    interface EventListener {
-        fun onItemClick(doc: Doc)
-    }
 }
