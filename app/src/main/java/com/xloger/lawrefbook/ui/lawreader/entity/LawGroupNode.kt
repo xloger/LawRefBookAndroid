@@ -13,10 +13,12 @@ class LawGroupNode(
     val group: Law.Group
 ) : BaseExpandNode() {
     override val childNode: MutableList<BaseNode>?
-        get() = if (group.groupList.isNotEmpty()) {
-            group.groupList.map { LawGroupNode(it) }
-        } else {
-            group.itemList.map { LawItemNode(it) }
-        }.toMutableList()
+//        get() = if (group.groupList.isNotEmpty()) {
+//            group.groupList.map { LawGroupNode(it) }
+//        } else {
+//            group.itemList.map { LawItemNode(it) }
+//        }.toMutableList()
+    get() = (group.itemList.map { LawItemNode(it) } + group.groupList.map { LawGroupNode(it) }).toMutableList()
+
 
 }
