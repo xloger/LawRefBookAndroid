@@ -10,7 +10,9 @@
         android:id="@+id/menu_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:background="#f2f2f6"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
