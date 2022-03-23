@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.entity.node.BaseNode
 import com.xloger.lawrefbook.R
@@ -28,11 +29,6 @@ class LawReaderFragment : Fragment() {
 
     private lateinit var viewModel: LawReaderViewModel
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,7 +41,7 @@ class LawReaderFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(LawReaderViewModel::class.java)
         initView()
-
+        initToolBar()
 
     }
 
@@ -54,32 +50,42 @@ class LawReaderFragment : Fragment() {
         val docPath = arguments?.getString("docPath") ?: "Laws/刑法/刑法.md"
         val law = bookRepository.getSingleLaw(docPath)
         lawReaderAdapter.setList(tranLaw(law))
-
-        (activity as? AppCompatActivity)?.supportActionBar?.apply {
-            title = law.title()
-        }
+        binding.lawReaderToolBar.title = law.title()
 
         binding.lawRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = lawReaderAdapter
         }
+        lawMenuDialog.apply {
+            listener = object : LawMenuDialog.EventListener {
+                override fun onMenuClick(group: Law.Group) {
+                    val index = lawReaderAdapter.data.indexOfFirst { (it as? LawGroupNode)?.group?.title == group.title }
+                    XLog.d("index:$index")
+                    binding.lawRecyclerView.scrollToPosition(index)
+                    dismiss()
+                }
+            }
+            create()
+            syncContainer(law)
+        }
         binding.lawMenuFab.apply {
             setOnClickListener {
-                lawMenuDialog.apply {
-                    create()
-                    show()
-                    syncContainer(law)
-                    listener = object : LawMenuDialog.EventListener {
-                        override fun onMenuClick(group: Law.Group) {
-//                            Toast.makeText(requireContext(), "${group.title}", Toast.LENGTH_SHORT).show()
+                lawMenuDialog.show()
+            }
+        }
+    }
 
-                            val index = lawReaderAdapter.data.indexOfFirst { (it as? LawGroupNode)?.group?.title == group.title }
-                            XLog.d("index:$index")
-                            binding.lawRecyclerView.scrollToPosition(index)
-                            dismiss()
-                        }
-                    }
+    private fun initToolBar() {
+        binding.lawReaderToolBar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
+        binding.lawReaderToolBar.setOnMenuItemClickListener {
+            when(it.itemId) {
+                R.id.app_bar_menu -> {
+                    lawMenuDialog.show()
+                    true
                 }
+                else -> false
             }
         }
     }

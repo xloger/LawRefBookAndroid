@@ -1,14 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.lawreader.LawReaderFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/law_reader_app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:liftOnScroll="true"
+        >
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/law_reader_tool_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:title=""
+            app:menu="@menu/law_reader_app_bar"
+            app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
+            />
+    </com.google.android.material.appbar.AppBarLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/law_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toBottomOf="parent"
         />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -20,4 +43,4 @@
         android:src="@drawable/ic_baseline_menu_24"
         />
 
-</FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
