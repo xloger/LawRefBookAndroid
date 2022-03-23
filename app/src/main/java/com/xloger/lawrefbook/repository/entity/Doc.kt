@@ -7,7 +7,11 @@ package com.xloger.lawrefbook.repository.entity
  */
 data class Doc(
     val name: String,
+    val fileName: String,
+    val id: String,
+    val level: String,
     val path: String,
+    val links: List<String>,
     val tags: Collection<Tag>
 ) {
 

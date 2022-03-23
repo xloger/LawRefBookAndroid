@@ -9,7 +9,9 @@ data class LawRefContainer(val groupList: List<Group>) {
 
 
     data class Group(
-        val tag: Doc.Tag,
+        val category: String,
+        val folder: String,
+        val links: List<String>,
         val docList: List<Doc>
     )
 }

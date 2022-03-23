@@ -2,7 +2,7 @@ package com.xloger.lawrefbook.ui.preview.weight.entity
 
 import com.chad.library.adapter.base.entity.node.BaseExpandNode
 import com.chad.library.adapter.base.entity.node.BaseNode
-import com.xloger.lawrefbook.repository.entity.Doc
+import com.xloger.lawrefbook.repository.entity.LawRefContainer
 
 /**
  * Created on 2022/3/20 19:51.
@@ -10,11 +10,11 @@ import com.xloger.lawrefbook.repository.entity.Doc
  * Email:phoenix@xloger.com
  */
 class GroupNode(
-    val tag: Doc.Tag,
+    val group: LawRefContainer.Group,
     val itemList: List<ItemNode>
 ) : BaseExpandNode() {
     override val childNode: MutableList<BaseNode>?
         get() = itemList.toMutableList()
 
-    fun name() = tag.name
+    fun name() = group.category
 }

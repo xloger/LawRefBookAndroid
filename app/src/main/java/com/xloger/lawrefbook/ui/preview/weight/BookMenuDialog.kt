@@ -43,7 +43,7 @@ class BookMenuDialog(
     private fun tranContainer(lawRefContainer: LawRefContainer) : List<BaseNode> {
         val list = mutableListOf<BaseNode>()
         lawRefContainer.groupList.forEach { group ->
-            list.add(GroupNode(group.tag, group.docList.map { ItemNode(it) }))
+            list.add(GroupNode(group, group.docList.map { ItemNode(it) }))
         }
         return list
     }

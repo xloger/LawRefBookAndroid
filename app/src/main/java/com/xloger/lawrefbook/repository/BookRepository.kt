@@ -1,8 +1,10 @@
 package com.xloger.lawrefbook.repository
 
 import android.content.res.AssetManager
+import com.google.gson.Gson
 import com.xloger.lawrefbook.repository.entity.Doc
 import com.xloger.lawrefbook.repository.entity.Law
+import com.xloger.lawrefbook.repository.entity.LawData
 import com.xloger.lawrefbook.repository.entity.LawRefContainer
 
 /**
@@ -39,17 +41,47 @@ class BookRepository(
     }
 
 
+//    fun getLawRefContainerByFind() : LawRefContainer {
+//        val groupList = mutableListOf<LawRefContainer.Group>()
+//        asset.list(baseDirName)?.forEach { path ->
+//            if (path.contains(".")) return@forEach
+//            val docList = mutableListOf<Doc>()
+//            asset.list("$baseDirName/$path")?.forEach doc@ { docName ->
+//                if (docName.startsWith("_")) return@doc
+//                val doc = Doc(docName.removeSuffix(".md"), "$baseDirName/$path/$docName", setOf(Doc.Tag(path)))
+//                docList.add(doc)
+//            }
+//            groupList.add(LawRefContainer.Group(Doc.Tag(path), docList))
+//        }
+//
+//        return LawRefContainer(groupList)
+//    }
+
     fun getLawRefContainer() : LawRefContainer {
         val groupList = mutableListOf<LawRefContainer.Group>()
-        asset.list(baseDirName)?.forEach { path ->
-            if (path.contains(".")) return@forEach
+        val dataJsonText = asset.open("$baseDirName/data.json").bufferedReader().readText()
+        val lawData = Gson().fromJson(dataJsonText, LawData::class.java)
+        lawData.forEach { folderItem ->
             val docList = mutableListOf<Doc>()
-            asset.list("$baseDirName/$path")?.forEach doc@ { docName ->
-                if (docName.startsWith("_")) return@doc
-                val doc = Doc(docName.removeSuffix(".md"), "$baseDirName/$path/$docName", setOf(Doc.Tag(path)))
+            folderItem.laws.forEach { lawItem ->
+                val doc = Doc(
+                    name = lawItem.name,
+                    fileName = lawItem.filename ?: lawItem.name,
+                    id = lawItem.id,
+                    level = lawItem.level,
+                    links = lawItem.links ?: emptyList(),
+                    path = "$baseDirName/${folderItem.folder}/${lawItem.filename ?: lawItem.name}.md",
+                    tags = emptyList()
+                )
                 docList.add(doc)
             }
-            groupList.add(LawRefContainer.Group(Doc.Tag(path), docList))
+
+            groupList.add(LawRefContainer.Group(
+                category = folderItem.category,
+                folder = folderItem.folder,
+                links = folderItem.links ?: emptyList(),
+                docList = docList
+            ))
         }
 
         return LawRefContainer(groupList)
