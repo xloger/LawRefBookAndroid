@@ -6,14 +6,14 @@
         android:id="@+id/app_bar_search"
         android:icon="@drawable/ic_baseline_search_24"
         android:title="搜索"
-        app:actionViewClass="android.widget.SearchView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="ifRoom"
         />
-
     <item
         android:id="@+id/app_bar_menu"
         android:icon="@drawable/ic_baseline_menu_24"
-        android:title="菜单"
+        android:title="目录"
         app:showAsAction="ifRoom"
         />
+
 </menu>

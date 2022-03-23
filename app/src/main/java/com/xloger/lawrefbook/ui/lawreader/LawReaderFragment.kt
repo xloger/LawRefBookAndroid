@@ -2,10 +2,10 @@ package com.xloger.lawrefbook.ui.lawreader
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -88,6 +88,27 @@ class LawReaderFragment : Fragment() {
                 else -> false
             }
         }
+        val findItem = binding.lawReaderToolBar.menu.findItem(R.id.app_bar_search)
+        val searchView = findItem.actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                search(query)
+                if (!searchView.isIconified) {
+                    searchView.isIconified = true
+                }
+                findItem.collapseActionView()
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                return false
+            }
+        })
+    }
+
+    private fun search(query: String) {
+        XLog.d("search:$query")
+        findNavController().navigate(R.id.searchFragment, bundleOf("query" to query, "docPath" to (arguments?.getString("docPath") ?: "Laws/刑法/刑法.md")))
     }
 
     private fun tranLaw(law: Law): List<BaseNode> {

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="#f2f2f6"
+        android:background="@color/bg_preview_page"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
