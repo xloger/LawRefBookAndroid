@@ -10,9 +10,9 @@ class Law(
     val group: Group,
 ) {
 
-    fun title() = group.title
+    fun title() = group.groupList.first().title
 
-    fun desc() = group.itemList.joinToString("\n") { it.print() }
+    fun desc() = group.groupList.first().itemList.joinToString("\n") { it.print() }
 
     data class Group(
         val level: Int,

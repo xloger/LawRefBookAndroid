@@ -2,12 +2,15 @@ package com.xloger.lawrefbook.ui.lawreader
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.entity.node.BaseNode
+import com.xloger.lawrefbook.R
 import com.xloger.lawrefbook.databinding.LawReaderFragmentBinding
 import com.xloger.lawrefbook.repository.BookRepository
 import com.xloger.lawrefbook.repository.entity.Law
@@ -24,6 +27,11 @@ class LawReaderFragment : Fragment() {
     private val lawMenuDialog by lazy { LawMenuDialog(requireContext()) }
 
     private lateinit var viewModel: LawReaderViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,6 +54,10 @@ class LawReaderFragment : Fragment() {
         val docPath = arguments?.getString("docPath") ?: "Laws/刑法/刑法.md"
         val law = bookRepository.getSingleLaw(docPath)
         lawReaderAdapter.setList(tranLaw(law))
+
+        (activity as? AppCompatActivity)?.supportActionBar?.apply {
+            title = law.title()
+        }
 
         binding.lawRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)

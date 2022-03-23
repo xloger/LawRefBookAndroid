@@ -41,22 +41,6 @@ class BookRepository(
     }
 
 
-//    fun getLawRefContainerByFind() : LawRefContainer {
-//        val groupList = mutableListOf<LawRefContainer.Group>()
-//        asset.list(baseDirName)?.forEach { path ->
-//            if (path.contains(".")) return@forEach
-//            val docList = mutableListOf<Doc>()
-//            asset.list("$baseDirName/$path")?.forEach doc@ { docName ->
-//                if (docName.startsWith("_")) return@doc
-//                val doc = Doc(docName.removeSuffix(".md"), "$baseDirName/$path/$docName", setOf(Doc.Tag(path)))
-//                docList.add(doc)
-//            }
-//            groupList.add(LawRefContainer.Group(Doc.Tag(path), docList))
-//        }
-//
-//        return LawRefContainer(groupList)
-//    }
-
     fun getLawRefContainer() : LawRefContainer {
         val groupList = mutableListOf<LawRefContainer.Group>()
         val dataJsonText = asset.open("$baseDirName/data.json").bufferedReader().readText()

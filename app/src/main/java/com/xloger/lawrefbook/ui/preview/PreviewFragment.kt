@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -58,6 +59,9 @@ class PreviewFragment : Fragment() {
             override fun onItemClick(doc: Doc) {
                 findNavController().navigate(R.id.lawReaderFragment, bundleOf("docPath" to doc.path))
             }
+        }
+        (activity as? AppCompatActivity)?.supportActionBar?.apply {
+            title = resources.getString(R.string.app_name)
         }
     }
 

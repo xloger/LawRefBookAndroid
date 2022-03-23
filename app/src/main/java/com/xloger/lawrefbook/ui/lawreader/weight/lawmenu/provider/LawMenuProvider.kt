@@ -29,18 +29,21 @@ class LawMenuProvider : BaseNodeProvider() {
         val divider = helper.getView<MaterialDivider>(R.id.law_menu_divider)
         var isShowDivider = true
         when(entity.group.level) {
-            1 -> textView.marginParams.marginStart = 4.px
-            2 -> textView.marginParams.marginStart = 12.px
-            3 -> textView.marginParams.marginStart = 18.px
-            4 -> {
+            1 -> {
+                textView.marginParams.marginStart = 8.px
+            }
+            2 -> {
+                textView.marginParams.marginStart = 16.px
+            }
+            3 -> {
                 textView.marginParams.marginStart = 24.px
+            }
+            4 -> {
+                textView.marginParams.marginStart = 32.px
                 isShowDivider = false
             }
         }
         divider.visibleOrGone(isShowDivider)
     }
 
-//    override fun onClick(helper: BaseViewHolder, view: View, data: BaseNode, position: Int) {
-////        getAdapter()?.expandOrCollapse(position)
-//    }
 }

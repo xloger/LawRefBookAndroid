@@ -44,7 +44,7 @@ class LawParser {
     private fun checkPutItem() {
         if (currentContent.isNotBlank()) {
 
-            val item = Law.Item("", currentContent.toString())
+            val item = Law.Item("", currentContent.toString().removeSuffix("\n"))
             getCurrentGroup(baseGroup, hLevel).itemList.add(item)
             currentContent.clear()
         }
