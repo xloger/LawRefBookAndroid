@@ -107,7 +107,6 @@ class LawReaderFragment : Fragment() {
     }
 
     private fun search(query: String) {
-        XLog.d("search:$query")
         findNavController().navigate(R.id.searchFragment, bundleOf("query" to query, "docPath" to (arguments?.getString("docPath") ?: "Laws/刑法/刑法.md")))
     }
 

@@ -6,6 +6,8 @@ import com.xloger.lawrefbook.repository.entity.Doc
 import com.xloger.lawrefbook.repository.entity.Law
 import com.xloger.lawrefbook.repository.entity.LawData
 import com.xloger.lawrefbook.repository.entity.LawRefContainer
+import com.xloger.lawrefbook.util.XLog
+import java.lang.Exception
 
 /**
  * Created on 2022/3/20 15:31.
@@ -25,9 +27,14 @@ class BookRepository(
     fun getSingleLaw(doc: Doc): Law {
         val parser = LawParser()
         parser.start()
-        asset.open(doc.path).bufferedReader().forEachLine {
-            parser.putLine(it)
+        try {
+            asset.open(doc.path).bufferedReader().forEachLine {
+                parser.putLine(it)
+            }
+        } catch (ex: Exception) {
+            XLog.e(ex)
         }
+
         return parser.endAndGet()
     }
 

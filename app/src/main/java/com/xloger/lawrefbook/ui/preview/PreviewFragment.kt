@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -43,6 +44,7 @@ class PreviewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(PreviewViewModel::class.java)
         initView()
+        initToolBar()
     }
 
 
@@ -63,6 +65,29 @@ class PreviewFragment : Fragment() {
         (activity as? AppCompatActivity)?.supportActionBar?.apply {
             title = resources.getString(R.string.app_name)
         }
+    }
+
+    private fun initToolBar() {
+        val findItem = binding.previewToolBar.menu.findItem(R.id.app_bar_search)
+        val searchView = findItem.actionView as SearchView
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                search(query)
+                if (!searchView.isIconified) {
+                    searchView.isIconified = true
+                }
+                findItem.collapseActionView()
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                return false
+            }
+        })
+    }
+
+    private fun search(query: String) {
+        findNavController().navigate(R.id.searchFragment, bundleOf("query" to query))
     }
 
     private fun tranContainer(lawRefContainer: LawRefContainer) : List<BaseNode> {

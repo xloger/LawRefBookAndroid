@@ -37,11 +37,13 @@ class SearchFragment : Fragment() {
         initView()
         initToolBar()
 
-        val bookRepository = BookRepository(requireContext().assets)
-        val docPath = arguments?.getString("docPath") ?: "Laws/刑法/刑法.md"
+        val docPath = arguments?.getString("docPath")
         val query = arguments?.getString("query") ?: ""
-        val law = bookRepository.getSingleLaw(docPath)
-        searchAdapter.setList(tranSearchLaw(law, query))
+        if (docPath != null) {
+            searchSingle(query, docPath)
+        } else {
+            searchAll(query)
+        }
     }
 
     private fun initView() {
@@ -56,6 +58,24 @@ class SearchFragment : Fragment() {
             findNavController().popBackStack()
         }
         binding.searchToolBar.title = "搜索：${arguments?.getString("query")}"
+    }
+
+    private fun searchSingle(query: String, docPath: String) {
+        val bookRepository = BookRepository(requireContext().assets)
+        val law = bookRepository.getSingleLaw(docPath)
+        searchAdapter.setList(tranSearchLaw(law, query))
+    }
+
+    private fun searchAll(query: String) {
+        val bookRepository = BookRepository(requireContext().assets)
+        val list = mutableListOf<BaseNode>()
+        bookRepository.getLawRefContainer().groupList.forEach {
+            it.docList.forEach { doc ->
+                val law = bookRepository.getSingleLaw(doc)
+                list.addAll(tranSearchLaw(law, query))
+            }
+        }
+        searchAdapter.setList(list)
     }
 
     private fun tranSearchLaw(law: Law, query: String): List<BaseNode> {

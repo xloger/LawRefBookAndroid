@@ -18,6 +18,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="8dp"
+            android:layout_gravity="center_horizontal"
             tools:text="标题"
             android:textSize="48sp"
             android:textFontWeight="200"
@@ -38,6 +39,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="8dp"
+            android:layout_gravity="center_horizontal"
             tools:text="标题"
             android:textSize="34sp"
             android:textFontWeight="400"
@@ -64,6 +66,13 @@
             android:textFontWeight="400"
             android:letterSpacing="0"
             />
+        <com.google.android.material.divider.MaterialDivider
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:dividerInsetStart="16dp"
+            app:dividerInsetEnd="16dp"
+            android:layout_gravity="bottom"
+            />
     </FrameLayout>
 
     <FrameLayout
@@ -85,13 +94,7 @@
             android:letterSpacing="0.15"
             />
 
-        <com.google.android.material.divider.MaterialDivider
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:dividerInsetStart="16dp"
-            app:dividerInsetEnd="16dp"
-            android:layout_gravity="bottom"
-            />
+
     </FrameLayout>
 
 </FrameLayout>
