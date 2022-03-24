@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
 }
+def isSigningEnabled = true
 
 android {
     compileSdk 31
@@ -16,10 +17,39 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        def properties = new Properties()
+        def inputSteam = project.rootProject.file('local.properties').newDataInputStream()
+        properties.load(inputSteam)
+
+
+        if(properties.getProperty('StoreFile') != null) {
+            isSigningEnabled = true
+            config {
+                storeFile file(properties.getProperty('StoreFile'))
+                storePassword properties.getProperty('StorePassword')
+                keyAlias properties.getProperty('KeyAlias')
+                keyPassword properties.getProperty('KeyPassword')
+            }
+        } else {
+            isSigningEnabled = false
+        }
+
+
+    }
+
     buildTypes {
+        debug {
+            if (isSigningEnabled) {
+                signingConfig signingConfigs.config
+            }
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            if (isSigningEnabled) {
+                signingConfig signingConfigs.config
+            }
         }
     }
     compileOptions {
