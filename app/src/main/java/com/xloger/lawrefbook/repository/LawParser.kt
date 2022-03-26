@@ -1,7 +1,6 @@
 package com.xloger.lawrefbook.repository
 
 import com.xloger.lawrefbook.repository.entity.Law
-import com.xloger.lawrefbook.util.XLog
 
 /**
  * Created on 2022/3/21 20:10.

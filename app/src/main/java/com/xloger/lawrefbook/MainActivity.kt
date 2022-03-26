@@ -1,8 +1,7 @@
 package com.xloger.lawrefbook
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.xloger.lawrefbook.ui.main.MainFragment
+import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
 

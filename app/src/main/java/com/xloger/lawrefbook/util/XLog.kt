@@ -1,7 +1,6 @@
 package com.xloger.lawrefbook.util
 
 import android.util.Log
-import java.lang.Exception
 
 /**
  * Created on 2022/3/20 19:33.

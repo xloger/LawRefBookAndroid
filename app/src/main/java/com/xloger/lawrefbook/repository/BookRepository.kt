@@ -7,7 +7,6 @@ import com.xloger.lawrefbook.repository.entity.Law
 import com.xloger.lawrefbook.repository.entity.LawData
 import com.xloger.lawrefbook.repository.entity.LawRefContainer
 import com.xloger.lawrefbook.util.XLog
-import java.lang.Exception
 
 /**
  * Created on 2022/3/20 15:31.
