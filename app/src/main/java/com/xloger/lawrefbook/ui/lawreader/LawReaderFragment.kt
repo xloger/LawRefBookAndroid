@@ -19,7 +19,7 @@ import com.chad.library.adapter.base.entity.node.BaseNode
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xloger.lawrefbook.R
 import com.xloger.lawrefbook.databinding.LawReaderFragmentBinding
-import com.xloger.lawrefbook.repository.entity.Law
+import com.xloger.lawrefbook.repository.book.entity.body.Law
 import com.xloger.lawrefbook.ui.lawreader.entity.LawGroupNode
 import com.xloger.lawrefbook.ui.lawreader.entity.LawItemNode
 import com.xloger.lawrefbook.ui.lawreader.weight.lawmenu.LawMenuDialog
@@ -36,7 +36,7 @@ class LawReaderFragment : Fragment() {
 
     private val viewModel: LawReaderViewModel by viewModel()
 
-    private val docPath by lazy { arguments?.getString("docPath") }
+    private val docId by lazy { arguments?.getString("docId") }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,8 +51,8 @@ class LawReaderFragment : Fragment() {
         initView()
         initToolBar()
         observe()
-        if (docPath != null) {
-            viewModel.requestLaw(docPath!!)
+        if (docId != null) {
+            viewModel.requestLaw(docId!!)
         } else {
             Toast.makeText(requireContext(), "输入路径无效", Toast.LENGTH_SHORT).show()
         }
@@ -160,10 +160,13 @@ class LawReaderFragment : Fragment() {
             binding.lawReaderToolBar.title = law.title()
             lawMenuDialog.syncContainer(law)
         }
+        viewModel.errorMsg.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), "$it", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun search(query: String) {
-        findNavController().navigate(R.id.searchFragment, bundleOf("query" to query, "docPath" to docPath))
+        findNavController().navigate(R.id.searchFragment, bundleOf("query" to query, "docId" to docId))
     }
 
     private fun tranLaw(law: Law): List<BaseNode> {

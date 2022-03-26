@@ -20,7 +20,7 @@
         android:name="com.xloger.lawrefbook.ui.lawreader.LawReaderFragment"
         >
         <argument
-            android:name="docPath"
+            android:name="docId"
             app:argType="string"
             />
     </fragment>
@@ -34,7 +34,7 @@
             app:argType="string"
             />
         <argument
-            android:name="docPath"
+            android:name="docId"
             app:argType="string"
             />
     </fragment>

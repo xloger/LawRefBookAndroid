@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chad.library.adapter.base.entity.node.BaseNode
-import com.xloger.lawrefbook.repository.BookRepository
-import com.xloger.lawrefbook.repository.entity.Law
+import com.xloger.lawrefbook.repository.book.BookRepository
+import com.xloger.lawrefbook.repository.book.entity.body.Law
 import com.xloger.lawrefbook.ui.lawreader.entity.LawItemNode
 
 class SearchViewModel(
@@ -14,8 +14,17 @@ class SearchViewModel(
     private val _searchList = MutableLiveData<Collection<BaseNode>>()
     val searchList: LiveData<Collection<BaseNode>> get() = _searchList
 
-    fun searchSingle(query: String, docPath: String) {
-        val law = bookRepository.getSingleLaw(docPath)
+    private val _errorMsg = MutableLiveData<String>()
+    val errorMsg: LiveData<String> get() = _errorMsg
+
+    fun searchSingle(query: String, docId: String) {
+        val result = bookRepository.getLawByDocId(docId)
+        val law = if (result.isSuccess) {
+            result.getOrThrow()
+        } else {
+            _errorMsg.value = result.exceptionOrNull()?.message
+            return
+        }
         _searchList.value = tranSearchLaw(law, query)
     }
 

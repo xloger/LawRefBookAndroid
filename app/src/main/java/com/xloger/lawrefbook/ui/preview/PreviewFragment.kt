@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.entity.node.BaseNode
 import com.xloger.lawrefbook.R
 import com.xloger.lawrefbook.databinding.PreviewFragmentBinding
-import com.xloger.lawrefbook.repository.entity.Doc
-import com.xloger.lawrefbook.repository.entity.LawRefContainer
+import com.xloger.lawrefbook.repository.book.entity.menu.Doc
+import com.xloger.lawrefbook.repository.book.entity.menu.LawRefContainer
 import com.xloger.lawrefbook.ui.preview.weight.BookMenuAdapter
 import com.xloger.lawrefbook.ui.preview.weight.entity.GroupNode
 import com.xloger.lawrefbook.ui.preview.weight.entity.ItemNode
@@ -57,7 +57,7 @@ class PreviewFragment : Fragment() {
         }
         menuAdapter.listener = object : BookMenuAdapter.EventListener {
             override fun onItemClick(doc: Doc) {
-                findNavController().navigate(R.id.lawReaderFragment, bundleOf("docPath" to doc.path))
+                findNavController().navigate(R.id.lawReaderFragment, bundleOf("docId" to doc.id))
             }
         }
         (activity as? AppCompatActivity)?.supportActionBar?.apply {

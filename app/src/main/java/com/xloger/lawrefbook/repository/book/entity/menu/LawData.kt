@@ -1,8 +1,11 @@
-package com.xloger.lawrefbook.repository.entity
+package com.xloger.lawrefbook.repository.book.entity.menu
 
 
 import androidx.annotation.Keep
 
+/**
+ * data.json 的映射类
+ */
 class LawData : ArrayList<LawData.LawDataItem>(){
     @Keep
     data class LawDataItem(

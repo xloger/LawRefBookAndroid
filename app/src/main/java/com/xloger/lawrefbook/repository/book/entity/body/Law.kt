@@ -1,4 +1,4 @@
-package com.xloger.lawrefbook.repository.entity
+package com.xloger.lawrefbook.repository.book.entity.body
 
 
 /**

@@ -1,8 +1,9 @@
 package com.xloger.lawrefbook
 
 import android.app.Application
-import android.content.Context
-import com.xloger.lawrefbook.repository.BookRepository
+import com.xloger.lawrefbook.repository.book.AssetsDataSource
+import com.xloger.lawrefbook.repository.book.BookDataSource
+import com.xloger.lawrefbook.repository.book.BookRepository
 import com.xloger.lawrefbook.ui.lawreader.LawReaderViewModel
 import com.xloger.lawrefbook.ui.preview.PreviewViewModel
 import com.xloger.lawrefbook.ui.search.SearchViewModel
@@ -30,7 +31,8 @@ class MainApplication : Application() {
     }
 
     private val appModule = module {
-        single { BookRepository(get<Context>().assets) }
+        single { AssetsDataSource(get()) as BookDataSource }
+        single { BookRepository(get()) }
         viewModel { LawReaderViewModel(get()) }
         viewModel { PreviewViewModel(get()) }
         viewModel { SearchViewModel(get()) }

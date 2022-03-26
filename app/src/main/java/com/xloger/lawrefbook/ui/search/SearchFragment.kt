@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,10 +34,10 @@ class SearchFragment : Fragment() {
         initToolBar()
         observe()
 
-        val docPath = arguments?.getString("docPath")
+        val docId = arguments?.getString("docId")
         val query = arguments?.getString("query") ?: ""
-        if (docPath != null) {
-            viewModel.searchSingle(query, docPath)
+        if (docId != null) {
+            viewModel.searchSingle(query, docId)
         } else {
             viewModel.searchAll(query)
         }
@@ -59,6 +60,9 @@ class SearchFragment : Fragment() {
     private fun observe() {
         viewModel.searchList.observe(viewLifecycleOwner) {
             searchAdapter.setList(it)
+        }
+        viewModel.errorMsg.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), "$it", Toast.LENGTH_SHORT).show()
         }
     }
 
