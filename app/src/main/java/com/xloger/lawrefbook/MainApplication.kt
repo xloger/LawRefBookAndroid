@@ -11,6 +11,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
+import org.koin.dsl.bind
 import org.koin.dsl.module
 
 /**
@@ -31,7 +32,7 @@ class MainApplication : Application() {
     }
 
     private val appModule = module {
-        single { AssetsDataSource(get()) as BookDataSource }
+        single { AssetsDataSource(get()) } bind BookDataSource::class
         single { BookRepository(get()) }
         viewModel { LawReaderViewModel(get()) }
         viewModel { PreviewViewModel(get()) }
