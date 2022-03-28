@@ -16,4 +16,8 @@ object XLog {
     fun e(exception: Exception) {
         Log.e("lrb", exception.toString())
     }
+
+    fun e(msg: String) {
+        Log.e("lrb", msg)
+    }
 }

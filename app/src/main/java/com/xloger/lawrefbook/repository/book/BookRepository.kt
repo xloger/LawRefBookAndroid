@@ -25,10 +25,12 @@ class BookRepository(
     }
 
     fun getDoc(docId: String): Doc? {
+        if (cacheDocMap.isEmpty()) getLawRefContainer()
         return cacheDocMap[docId]
     }
 
     fun getGroup(groupId: String): LawRefContainer.Group? {
+        if (cacheGroupMap.isEmpty()) getLawRefContainer()
         return cacheGroupMap[groupId]
     }
 
