@@ -13,9 +13,10 @@ import com.xloger.lawrefbook.ui.search.provider.SearchItemProvider
 class SearchAdapter(
 
 ) : BaseNodeAdapter() {
+    val searchItemProvider = SearchItemProvider()
 
     init {
-        addNodeProvider(SearchItemProvider())
+        addNodeProvider(searchItemProvider)
     }
 
     override fun getItemType(data: List<BaseNode>, position: Int): Int {
@@ -23,5 +24,9 @@ class SearchAdapter(
             is SearchItemNode -> 1
             else -> -1
         }
+    }
+
+    fun setSearchKey(key: String) {
+        searchItemProvider.searchKey = key
     }
 }

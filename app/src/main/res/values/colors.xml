@@ -10,4 +10,5 @@
 
     <color name="bg_preview_page">#f2f2f6</color>
     <color name="bg_preview_item">#FFF</color>
+    <color name="search_key">#9a0000</color>
 </resources>

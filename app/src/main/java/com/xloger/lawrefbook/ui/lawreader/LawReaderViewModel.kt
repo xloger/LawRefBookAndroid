@@ -3,8 +3,11 @@ package com.xloger.lawrefbook.ui.lawreader
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.chad.library.adapter.base.entity.node.BaseNode
 import com.xloger.lawrefbook.repository.book.BookRepository
 import com.xloger.lawrefbook.repository.book.entity.body.Law
+import com.xloger.lawrefbook.ui.lawreader.entity.LawGroupNode
+import com.xloger.lawrefbook.ui.lawreader.weight.lawmenu.entity.LawMenuNode
 
 class LawReaderViewModel(
     private val bookRepository: BookRepository
@@ -13,16 +16,39 @@ class LawReaderViewModel(
     private val _law = MutableLiveData<Law>()
     val law: LiveData<Law> get() = _law
 
+    private val _contentList = MutableLiveData<Collection<BaseNode>>()
+    val contentList: LiveData<Collection<BaseNode>> get() = _contentList
+
+    private val _menuList = MutableLiveData<Collection<BaseNode>>()
+    val menuList: LiveData<Collection<BaseNode>> get() = _menuList
+
     private val _errorMsg = MutableLiveData<String>()
     val errorMsg: LiveData<String> get() = _errorMsg
 
     fun requestLaw(docId: String) {
         bookRepository.getLawByDocId(docId).let {
             if (it.isSuccess) {
-                _law.value = it.getOrThrow()
+                val law1 = it.getOrThrow()
+                _law.postValue(law1)
+                _contentList.postValue(tranLawContent(law1))
+                _menuList.postValue(tranLawMenu(law1))
             } else {
-                _errorMsg.value = it.exceptionOrNull()?.message
+                _errorMsg.postValue(it.exceptionOrNull()?.message)
             }
         }
+    }
+
+    private fun tranLawContent(law: Law): List<BaseNode> {
+        val list = mutableListOf<BaseNode>()
+        list.add(LawGroupNode(law.group))
+        return list
+    }
+
+    private fun tranLawMenu(law: Law) : List<BaseNode> {
+        val list = mutableListOf<BaseNode>()
+        law.group.groupList.forEach { group ->
+            list.add(LawMenuNode(group))
+        }
+        return list
     }
 }

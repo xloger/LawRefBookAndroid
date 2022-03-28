@@ -15,7 +15,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.chad.library.adapter.base.entity.node.BaseNode
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xloger.lawrefbook.R
 import com.xloger.lawrefbook.databinding.LawReaderFragmentBinding
@@ -37,6 +36,7 @@ class LawReaderFragment : Fragment() {
     private val viewModel: LawReaderViewModel by viewModel()
 
     private val docId by lazy { arguments?.getString("docId") }
+    private var jumpText: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,6 +56,7 @@ class LawReaderFragment : Fragment() {
         } else {
             Toast.makeText(requireContext(), "输入路径无效", Toast.LENGTH_SHORT).show()
         }
+        jumpText = arguments?.getString("jumpText")
     }
 
     private fun initView() {
@@ -156,12 +157,25 @@ class LawReaderFragment : Fragment() {
 
     private fun observe() {
         viewModel.law.observe(viewLifecycleOwner) { law ->
-            lawReaderAdapter.setList(tranLaw(law))
             binding.lawReaderToolBar.title = law.title()
-            lawMenuDialog.syncContainer(law)
+        }
+        viewModel.contentList.observe(viewLifecycleOwner) {
+            lawReaderAdapter.setList(it)
+            jumpTextFirst()
+        }
+        viewModel.menuList.observe(viewLifecycleOwner) {
+            lawMenuDialog.menuAdapter.setList(it)
         }
         viewModel.errorMsg.observe(viewLifecycleOwner) {
             Toast.makeText(requireContext(), "$it", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun jumpTextFirst() {
+        if (jumpText != null) {
+            val jumpNodeIndex = lawReaderAdapter.data.indexOfFirst { it is LawItemNode && it.lawItem.print() == jumpText }
+            binding.lawRecyclerView.scrollToPosition(jumpNodeIndex)
+            jumpText = null
         }
     }
 
@@ -169,11 +183,6 @@ class LawReaderFragment : Fragment() {
         findNavController().navigate(R.id.searchFragment, bundleOf("query" to query, "docId" to docId))
     }
 
-    private fun tranLaw(law: Law): List<BaseNode> {
-        val list = mutableListOf<BaseNode>()
-        list.add(LawGroupNode(law.group))
-        return list
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

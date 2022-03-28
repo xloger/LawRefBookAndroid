@@ -23,6 +23,10 @@
             android:name="docId"
             app:argType="string"
             />
+        <argument
+            android:name="jumpText"
+            app:argType="string"
+            />
     </fragment>
 
     <fragment

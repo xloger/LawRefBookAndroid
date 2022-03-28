@@ -2,4 +2,5 @@
 <resources>
     <color name="bg_preview_page">#282828</color>
     <color name="bg_preview_item">#000</color>
+    <color name="search_key">#670200</color>
 </resources>
