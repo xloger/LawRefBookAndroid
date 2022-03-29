@@ -8,18 +8,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.entity.node.BaseNode
 import com.xloger.lawrefbook.R
 import com.xloger.lawrefbook.databinding.PreviewFragmentBinding
-import com.xloger.lawrefbook.repository.BookRepository
-import com.xloger.lawrefbook.repository.entity.Doc
-import com.xloger.lawrefbook.repository.entity.LawRefContainer
+import com.xloger.lawrefbook.repository.book.entity.menu.Doc
+import com.xloger.lawrefbook.repository.book.entity.menu.LawRefContainer
 import com.xloger.lawrefbook.ui.preview.weight.BookMenuAdapter
 import com.xloger.lawrefbook.ui.preview.weight.entity.GroupNode
 import com.xloger.lawrefbook.ui.preview.weight.entity.ItemNode
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PreviewFragment : Fragment() {
 
@@ -30,7 +29,7 @@ class PreviewFragment : Fragment() {
     private val menuAdapter by lazy { BookMenuAdapter() }
 
 
-    private lateinit var viewModel: PreviewViewModel
+    private val viewModel: PreviewViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,24 +41,23 @@ class PreviewFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(PreviewViewModel::class.java)
         initView()
         initToolBar()
+        observe()
+
+        viewModel.requestLawRefContainer()
     }
 
 
     private fun initView() {
-        val bookRepository = BookRepository(requireContext().assets)
-        val lawRefContainer = bookRepository.getLawRefContainer()
 
         binding.menuRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = menuAdapter
         }
-        menuAdapter.setList(tranContainer(lawRefContainer))
         menuAdapter.listener = object : BookMenuAdapter.EventListener {
             override fun onItemClick(doc: Doc) {
-                findNavController().navigate(R.id.lawReaderFragment, bundleOf("docPath" to doc.path))
+                findNavController().navigate(R.id.lawReaderFragment, bundleOf("docId" to doc.id))
             }
         }
         (activity as? AppCompatActivity)?.supportActionBar?.apply {
@@ -68,6 +66,15 @@ class PreviewFragment : Fragment() {
     }
 
     private fun initToolBar() {
+        binding.previewToolBar.setOnMenuItemClickListener {
+            when(it.itemId) {
+                R.id.app_bar_fav -> {
+                    findNavController().navigate(R.id.favoritesFragment)
+                    true
+                }
+                else -> false
+            }
+        }
         val findItem = binding.previewToolBar.menu.findItem(R.id.app_bar_search)
         val searchView = findItem.actionView as SearchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -84,6 +91,12 @@ class PreviewFragment : Fragment() {
                 return false
             }
         })
+    }
+
+    private fun observe() {
+        viewModel.lawRefContainer.observe(viewLifecycleOwner) {
+            menuAdapter.setList(tranContainer(it))
+        }
     }
 
     private fun search(query: String) {

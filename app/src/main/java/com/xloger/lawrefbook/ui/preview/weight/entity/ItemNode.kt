@@ -1,7 +1,7 @@
 package com.xloger.lawrefbook.ui.preview.weight.entity
 
 import com.chad.library.adapter.base.entity.node.BaseNode
-import com.xloger.lawrefbook.repository.entity.Doc
+import com.xloger.lawrefbook.repository.book.entity.menu.Doc
 
 /**
  * Created on 2022/3/20 19:53.

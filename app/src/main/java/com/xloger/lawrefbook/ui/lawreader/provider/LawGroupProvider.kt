@@ -1,7 +1,5 @@
 package com.xloger.lawrefbook.ui.lawreader.provider
 
-import android.graphics.Color
-import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
 import com.chad.library.adapter.base.entity.node.BaseNode

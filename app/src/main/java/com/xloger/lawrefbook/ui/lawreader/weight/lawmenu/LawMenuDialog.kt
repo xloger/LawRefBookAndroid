@@ -3,10 +3,9 @@ package com.xloger.lawrefbook.ui.lawreader.weight.lawmenu
 import android.content.Context
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.chad.library.adapter.base.entity.node.BaseNode
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.xloger.lawrefbook.databinding.DialogMenuBookBinding
-import com.xloger.lawrefbook.repository.entity.Law
+import com.xloger.lawrefbook.repository.book.entity.body.Law
 import com.xloger.lawrefbook.ui.lawreader.weight.lawmenu.entity.LawMenuNode
 
 /**
@@ -20,7 +19,7 @@ class LawMenuDialog(
     var listener: EventListener? = null
 
     private lateinit var binding: DialogMenuBookBinding
-    private val menuAdapter by lazy { LawMenuAdapter() }
+    val menuAdapter by lazy { LawMenuAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,18 +37,6 @@ class LawMenuDialog(
             val lawMenuNode = menuAdapter.getItem(position) as LawMenuNode
             listener?.onMenuClick(lawMenuNode.group)
         }
-    }
-
-    fun syncContainer(law: Law) {
-        menuAdapter.setList(tranContainer(law))
-    }
-
-    private fun tranContainer(law: Law) : List<BaseNode> {
-        val list = mutableListOf<BaseNode>()
-        law.group.groupList.forEach { group ->
-            list.add(LawMenuNode(group))
-        }
-        return list
     }
 
     interface EventListener {

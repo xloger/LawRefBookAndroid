@@ -1,5 +1,7 @@
 package com.xloger.lawrefbook.ui.lawreader.provider
 
+import androidx.core.text.bold
+import androidx.core.text.buildSpannedString
 import com.chad.library.adapter.base.entity.node.BaseNode
 import com.chad.library.adapter.base.provider.BaseNodeProvider
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
@@ -19,6 +21,15 @@ class LawItemProvider : BaseNodeProvider() {
 
     override fun convert(helper: BaseViewHolder, item: BaseNode) {
         val entity = item as LawItemNode
-        helper.setText(R.id.law_item_content, entity.lawItem.content)
+        val spannedString = buildSpannedString {
+            bold {
+//                inSpans(ForegroundColorSpan(ContextCompat.getColor(context, R.color.search_key))) {
+                    append(entity.lawItem.article)
+//                }
+            }
+            append(" ")
+            append(entity.lawItem.content)
+        }
+        helper.setText(R.id.law_item_content, spannedString)
     }
 }

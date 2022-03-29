@@ -5,7 +5,6 @@ import com.chad.library.adapter.base.entity.node.BaseNode
 import com.chad.library.adapter.base.provider.BaseNodeProvider
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.xloger.lawrefbook.R
-import com.xloger.lawrefbook.ui.preview.weight.entity.GroupNode
 import com.xloger.lawrefbook.ui.preview.weight.entity.ItemNode
 
 /**

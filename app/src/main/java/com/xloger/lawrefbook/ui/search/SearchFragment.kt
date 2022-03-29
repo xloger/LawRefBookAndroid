@@ -1,18 +1,23 @@
 package com.xloger.lawrefbook.ui.search
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.chad.library.adapter.base.entity.node.BaseNode
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.xloger.lawrefbook.R
 import com.xloger.lawrefbook.databinding.SearchFragmentBinding
-import com.xloger.lawrefbook.repository.BookRepository
-import com.xloger.lawrefbook.repository.entity.Law
-import com.xloger.lawrefbook.ui.lawreader.entity.LawItemNode
+import com.xloger.lawrefbook.ui.search.entity.SearchItemNode
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
 
@@ -21,7 +26,7 @@ class SearchFragment : Fragment() {
 
     private val searchAdapter by lazy { SearchAdapter() }
 
-    private lateinit var viewModel: SearchViewModel
+    private val viewModel: SearchViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,16 +38,17 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
         initView()
         initToolBar()
+        observe()
 
-        val docPath = arguments?.getString("docPath")
+        val docId = arguments?.getString("docId")
         val query = arguments?.getString("query") ?: ""
-        if (docPath != null) {
-            searchSingle(query, docPath)
+        searchAdapter.setSearchKey(query)
+        if (docId != null) {
+            viewModel.searchSingle(query, docId)
         } else {
-            searchAll(query)
+            viewModel.searchAll(query)
         }
     }
 
@@ -50,6 +56,39 @@ class SearchFragment : Fragment() {
         binding.searchRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = searchAdapter
+        }
+        searchAdapter.setOnItemClickListener { adapter, _, position ->
+            val entity = adapter.data[position]
+            when(entity) {
+                is SearchItemNode -> {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("操作")
+                        .setItems(listOf<String>("收藏", "复制", "跳转原文").toTypedArray(), object : DialogInterface.OnClickListener {
+                            override fun onClick(p0: DialogInterface?, p1: Int) {
+                                val searchItem = entity.searchItem
+                                when(p1) {
+                                    0 -> {
+                                        Toast.makeText(requireContext(), "还未支持", Toast.LENGTH_SHORT)
+                                            .show()
+                                    }
+                                    1 -> {
+                                        fun copy(text: String) {
+                                            val clipboard = requireContext().getSystemService(
+                                                Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                            val textCd = ClipData.newPlainText("text", text)
+                                            clipboard.setPrimaryClip(textCd)
+                                        }
+                                        copy(searchItem.lawItem.print())
+                                    }
+                                    2 -> {
+                                        findNavController().navigate(R.id.lawReaderFragment, bundleOf("docId" to searchItem.docId, "jumpText" to searchItem.lawItem.print()))
+                                    }
+                                }
+                            }
+                        })
+                        .show()
+                }
+            }
         }
     }
 
@@ -60,42 +99,15 @@ class SearchFragment : Fragment() {
         binding.searchToolBar.title = "搜索：${arguments?.getString("query")}"
     }
 
-    private fun searchSingle(query: String, docPath: String) {
-        val bookRepository = BookRepository(requireContext().assets)
-        val law = bookRepository.getSingleLaw(docPath)
-        searchAdapter.setList(tranSearchLaw(law, query))
+    private fun observe() {
+        viewModel.searchList.observe(viewLifecycleOwner) {
+            searchAdapter.setList(it)
+        }
+        viewModel.errorMsg.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), "$it", Toast.LENGTH_SHORT).show()
+        }
     }
 
-    private fun searchAll(query: String) {
-        val bookRepository = BookRepository(requireContext().assets)
-        val list = mutableListOf<BaseNode>()
-        bookRepository.getLawRefContainer().groupList.forEach {
-            it.docList.forEach { doc ->
-                val law = bookRepository.getSingleLaw(doc)
-                list.addAll(tranSearchLaw(law, query))
-            }
-        }
-        searchAdapter.setList(list)
-    }
-
-    private fun tranSearchLaw(law: Law, query: String): List<BaseNode> {
-        val list = mutableListOf<BaseNode>()
-        eachItem(law.group).forEach {
-            if (it.content.contains(query)) {
-                list.add(LawItemNode(it))
-            }
-        }
-        return list
-    }
-
-    private fun eachItem(group: Law.Group) : List<Law.Item> {
-        val list = mutableListOf<Law.Item>()
-        list.addAll(group.itemList)
-        group.groupList.forEach {
-            list.addAll(eachItem(it))
-        }
-        return list
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -2,8 +2,8 @@ package com.xloger.lawrefbook.ui.search
 
 import com.chad.library.adapter.base.BaseNodeAdapter
 import com.chad.library.adapter.base.entity.node.BaseNode
-import com.xloger.lawrefbook.ui.lawreader.entity.LawItemNode
-import com.xloger.lawrefbook.ui.lawreader.provider.LawItemProvider
+import com.xloger.lawrefbook.ui.search.entity.SearchItemNode
+import com.xloger.lawrefbook.ui.search.provider.SearchItemProvider
 
 /**
  * Created on 2022/3/21 22:42.
@@ -13,15 +13,20 @@ import com.xloger.lawrefbook.ui.lawreader.provider.LawItemProvider
 class SearchAdapter(
 
 ) : BaseNodeAdapter() {
+    val searchItemProvider = SearchItemProvider()
 
     init {
-        addNodeProvider(LawItemProvider())
+        addNodeProvider(searchItemProvider)
     }
 
     override fun getItemType(data: List<BaseNode>, position: Int): Int {
         return when(data[position]) {
-            is LawItemNode -> 2
+            is SearchItemNode -> 1
             else -> -1
         }
+    }
+
+    fun setSearchKey(key: String) {
+        searchItemProvider.searchKey = key
     }
 }

@@ -1,14 +1,15 @@
-package com.xloger.lawrefbook.repository
+package com.xloger.lawrefbook.repository.book.parser
 
-import com.xloger.lawrefbook.repository.entity.Law
-import com.xloger.lawrefbook.util.XLog
+import com.xloger.lawrefbook.repository.book.entity.body.Law
 
 /**
  * Created on 2022/3/21 20:10.
  * Author: xloger
  * Email:phoenix@xloger.com
  */
-class LawParser {
+class LawParser(
+    private val lawRegexHelper: LawRegexHelper
+) {
     private var hLevel = 0
 
     private var baseGroup = Law.Group(0, "", mutableListOf(), mutableListOf())
@@ -43,8 +44,7 @@ class LawParser {
      */
     private fun checkPutItem() {
         if (currentContent.isNotBlank()) {
-
-            val item = Law.Item("", currentContent.toString().removeSuffix("\n"))
+            val item = lawRegexHelper.parserLawItem(currentContent.toString().removeSuffix("\n"))
             getCurrentGroup(baseGroup, hLevel).itemList.add(item)
             currentContent.clear()
         }

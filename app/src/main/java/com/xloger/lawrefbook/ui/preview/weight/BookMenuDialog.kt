@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.entity.node.BaseNode
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.xloger.lawrefbook.databinding.DialogMenuBookBinding
-import com.xloger.lawrefbook.repository.entity.LawRefContainer
+import com.xloger.lawrefbook.repository.book.entity.menu.LawRefContainer
 import com.xloger.lawrefbook.ui.preview.weight.entity.GroupNode
 import com.xloger.lawrefbook.ui.preview.weight.entity.ItemNode
 

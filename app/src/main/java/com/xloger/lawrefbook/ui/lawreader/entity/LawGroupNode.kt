@@ -2,7 +2,7 @@ package com.xloger.lawrefbook.ui.lawreader.entity
 
 import com.chad.library.adapter.base.entity.node.BaseExpandNode
 import com.chad.library.adapter.base.entity.node.BaseNode
-import com.xloger.lawrefbook.repository.entity.Law
+import com.xloger.lawrefbook.repository.book.entity.body.Law
 
 /**
  * Created on 2022/3/20 19:51.
@@ -18,7 +18,7 @@ class LawGroupNode(
 //        } else {
 //            group.itemList.map { LawItemNode(it) }
 //        }.toMutableList()
-    get() = (group.itemList.map { LawItemNode(it) } + group.groupList.map { LawGroupNode(it) }).toMutableList()
+    get() = (group.itemList.filter { !it.isDesc }.map { LawItemNode(it) } + group.groupList.map { LawGroupNode(it) }).toMutableList()
 
 
 }

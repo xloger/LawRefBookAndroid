@@ -15,5 +15,11 @@
         android:title="目录"
         app:showAsAction="ifRoom"
         />
+    <item
+        android:id="@+id/app_bar_info"
+        android:icon="@drawable/ic_baseline_info_24"
+        android:title="信息"
+        app:showAsAction="ifRoom"
+        />
 
 </menu>

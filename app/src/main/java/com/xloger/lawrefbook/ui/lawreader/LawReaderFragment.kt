@@ -12,20 +12,18 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.chad.library.adapter.base.entity.node.BaseNode
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xloger.lawrefbook.R
 import com.xloger.lawrefbook.databinding.LawReaderFragmentBinding
-import com.xloger.lawrefbook.repository.BookRepository
-import com.xloger.lawrefbook.repository.entity.Law
+import com.xloger.lawrefbook.repository.book.entity.body.Law
 import com.xloger.lawrefbook.ui.lawreader.entity.LawGroupNode
 import com.xloger.lawrefbook.ui.lawreader.entity.LawItemNode
 import com.xloger.lawrefbook.ui.lawreader.weight.lawmenu.LawMenuDialog
 import com.xloger.lawrefbook.util.XLog
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LawReaderFragment : Fragment() {
 
@@ -35,7 +33,11 @@ class LawReaderFragment : Fragment() {
     private val lawReaderAdapter by lazy { LawReaderAdapter() }
     private val lawMenuDialog by lazy { LawMenuDialog(requireContext()) }
 
-    private lateinit var viewModel: LawReaderViewModel
+    private val viewModel: LawReaderViewModel by viewModel()
+
+    private val docId by lazy { arguments?.getString("docId") }
+    private var jumpText: String? = null
+    private var desc: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,19 +49,18 @@ class LawReaderFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this).get(LawReaderViewModel::class.java)
         initView()
         initToolBar()
-
+        observe()
+        if (docId != null) {
+            viewModel.requestLaw(docId!!)
+        } else {
+            Toast.makeText(requireContext(), "输入路径无效", Toast.LENGTH_SHORT).show()
+        }
+        jumpText = arguments?.getString("jumpText")
     }
 
     private fun initView() {
-        val bookRepository = BookRepository(requireContext().assets)
-        val docPath = arguments?.getString("docPath") ?: "Laws/刑法/刑法.md"
-        val law = bookRepository.getSingleLaw(docPath)
-        lawReaderAdapter.setList(tranLaw(law))
-        binding.lawReaderToolBar.title = law.title()
-
         binding.lawRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = lawReaderAdapter
@@ -84,7 +85,6 @@ class LawReaderFragment : Fragment() {
                 }
             }
             create()
-            syncContainer(law)
         }
         binding.lawMenuFab.apply {
             setOnClickListener {
@@ -100,12 +100,11 @@ class LawReaderFragment : Fragment() {
                 is LawItemNode -> {
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle("操作")
-                        .setItems(listOf<String>("喜欢", "复制").toTypedArray(), object : DialogInterface.OnClickListener {
+                        .setItems(listOf<String>("收藏", "复制").toTypedArray(), object : DialogInterface.OnClickListener {
                             override fun onClick(p0: DialogInterface?, p1: Int) {
                                 when(p1) {
                                     0 -> {
-                                        Toast.makeText(requireContext(), "还未支持", Toast.LENGTH_SHORT)
-                                            .show()
+                                        viewModel.favItem(docId!!, entity)
                                     }
                                     1 -> {
                                         fun copy(text: String) {
@@ -135,6 +134,10 @@ class LawReaderFragment : Fragment() {
                     lawMenuDialog.show()
                     true
                 }
+                R.id.app_bar_info -> {
+                    showInfoDialog()
+                    true
+                }
                 else -> false
             }
         }
@@ -156,14 +159,44 @@ class LawReaderFragment : Fragment() {
         })
     }
 
-    private fun search(query: String) {
-        findNavController().navigate(R.id.searchFragment, bundleOf("query" to query, "docPath" to (arguments?.getString("docPath") ?: "Laws/刑法/刑法.md")))
+    private fun observe() {
+        viewModel.law.observe(viewLifecycleOwner) { law ->
+            binding.lawReaderToolBar.title = law.title
+            desc = law.desc
+        }
+        viewModel.contentList.observe(viewLifecycleOwner) {
+            lawReaderAdapter.setList(it)
+            jumpTextFirst()
+        }
+        viewModel.menuList.observe(viewLifecycleOwner) {
+            lawMenuDialog.menuAdapter.setList(it)
+        }
+        viewModel.errorMsg.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), "$it", Toast.LENGTH_SHORT).show()
+        }
     }
 
-    private fun tranLaw(law: Law): List<BaseNode> {
-        val list = mutableListOf<BaseNode>()
-        list.add(LawGroupNode(law.group))
-        return list
+    private fun jumpTextFirst() {
+        if (jumpText != null) {
+            val jumpNodeIndex = lawReaderAdapter.data.indexOfFirst { it is LawItemNode && it.lawItem.print() == jumpText }
+            binding.lawRecyclerView.scrollToPosition(jumpNodeIndex)
+            jumpText = null
+        }
+    }
+
+    private fun search(query: String) {
+        findNavController().navigate(R.id.searchFragment, bundleOf("query" to query, "docId" to docId))
+    }
+
+    private fun showInfoDialog() {
+        if (desc.isNullOrBlank()) {
+            Toast.makeText(context, "找不到描述信息", Toast.LENGTH_SHORT).show()
+        }
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("信息")
+            .setMessage(desc)
+            .create()
+            .show()
     }
 
     override fun onDestroyView() {

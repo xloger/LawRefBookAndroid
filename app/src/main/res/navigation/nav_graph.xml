@@ -20,7 +20,11 @@
         android:name="com.xloger.lawrefbook.ui.lawreader.LawReaderFragment"
         >
         <argument
-            android:name="docPath"
+            android:name="docId"
+            app:argType="string"
+            />
+        <argument
+            android:name="jumpText"
             app:argType="string"
             />
     </fragment>
@@ -34,9 +38,16 @@
             app:argType="string"
             />
         <argument
-            android:name="docPath"
+            android:name="docId"
             app:argType="string"
             />
+    </fragment>
+
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.xloger.lawrefbook.ui.favorites.FavoritesFragment"
+        >
+
     </fragment>
 
 </navigation>

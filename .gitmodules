@@ -1,0 +1,3 @@
+[submodule "app/src/main/assets/Laws"]
+	path = app/src/main/assets/Laws
+	url = git@github.com:LawRefBook/Laws.git
