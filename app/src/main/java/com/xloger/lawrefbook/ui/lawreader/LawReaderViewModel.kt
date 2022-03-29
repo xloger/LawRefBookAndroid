@@ -6,11 +6,16 @@ import androidx.lifecycle.ViewModel
 import com.chad.library.adapter.base.entity.node.BaseNode
 import com.xloger.lawrefbook.repository.book.BookRepository
 import com.xloger.lawrefbook.repository.book.entity.body.Law
+import com.xloger.lawrefbook.repository.favorites.FavoritesRepository
+import com.xloger.lawrefbook.repository.favorites.entity.FavoritesLawItem
 import com.xloger.lawrefbook.ui.lawreader.entity.LawGroupNode
+import com.xloger.lawrefbook.ui.lawreader.entity.LawItemNode
 import com.xloger.lawrefbook.ui.lawreader.weight.lawmenu.entity.LawMenuNode
+import kotlin.concurrent.thread
 
 class LawReaderViewModel(
-    private val bookRepository: BookRepository
+    private val bookRepository: BookRepository,
+    private val favRepository: FavoritesRepository
 ) : ViewModel() {
 
     private val _law = MutableLiveData<Law>()
@@ -50,5 +55,17 @@ class LawReaderViewModel(
             list.add(LawMenuNode(group))
         }
         return list
+    }
+
+    fun favItem(docId: String, lawItemNode: LawItemNode) {
+        val lawItem = lawItemNode.lawItem
+        thread {
+            favRepository.addFavItem(FavoritesLawItem(
+                docId = docId,
+                content = lawItem.print(),
+                timestamp = System.currentTimeMillis()
+            ))
+        }
+
     }
 }

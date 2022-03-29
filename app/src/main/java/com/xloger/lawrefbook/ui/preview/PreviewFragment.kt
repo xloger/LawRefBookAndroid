@@ -66,6 +66,15 @@ class PreviewFragment : Fragment() {
     }
 
     private fun initToolBar() {
+        binding.previewToolBar.setOnMenuItemClickListener {
+            when(it.itemId) {
+                R.id.app_bar_fav -> {
+                    findNavController().navigate(R.id.favoritesFragment)
+                    true
+                }
+                else -> false
+            }
+        }
         val findItem = binding.previewToolBar.menu.findItem(R.id.app_bar_search)
         val searchView = findItem.actionView as SearchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {

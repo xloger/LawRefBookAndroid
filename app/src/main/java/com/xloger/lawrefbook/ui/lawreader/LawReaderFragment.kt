@@ -103,8 +103,7 @@ class LawReaderFragment : Fragment() {
                             override fun onClick(p0: DialogInterface?, p1: Int) {
                                 when(p1) {
                                     0 -> {
-                                        Toast.makeText(requireContext(), "还未支持", Toast.LENGTH_SHORT)
-                                            .show()
+                                        viewModel.favItem(docId!!, entity)
                                     }
                                     1 -> {
                                         fun copy(text: String) {

@@ -43,4 +43,11 @@
             />
     </fragment>
 
+    <fragment
+        android:id="@+id/favoritesFragment"
+        android:name="com.xloger.lawrefbook.ui.favorites.FavoritesFragment"
+        >
+
+    </fragment>
+
 </navigation>

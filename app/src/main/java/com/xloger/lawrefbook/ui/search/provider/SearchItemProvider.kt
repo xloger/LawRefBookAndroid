@@ -47,6 +47,7 @@ class SearchItemProvider: BaseNodeProvider() {
      * code from:<https://stackoverflow.com/a/67464940>
      */
     private fun highLightText(spannable: Spannable, string: String, start: Int) {
+        if (searchKey.isBlank()) return
         val filterPattern = searchKey
         val startPos: Int = start + string.substring(start)
             .indexOf(filterPattern)
