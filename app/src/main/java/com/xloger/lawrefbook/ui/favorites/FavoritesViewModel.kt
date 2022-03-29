@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.chad.library.adapter.base.entity.node.BaseNode
 import com.xloger.lawrefbook.repository.book.parser.LawRegexHelper
 import com.xloger.lawrefbook.repository.favorites.FavoritesRepository
+import com.xloger.lawrefbook.repository.favorites.entity.FavoritesLawItem
 import com.xloger.lawrefbook.ui.search.entity.SearchItem
 import com.xloger.lawrefbook.ui.search.entity.SearchItemNode
 import kotlin.concurrent.thread
@@ -28,5 +29,26 @@ class FavoritesViewModel(
         }
     }
 
+
+    fun favoriteItem(searchItemNode: SearchItemNode) {
+        thread {
+            favRepository.addFavItem(
+                FavoritesLawItem(
+                    docId = searchItemNode.searchItem.docId,
+                    content = searchItemNode.searchItem.lawItem.print(),
+                    timestamp = System.currentTimeMillis()
+                )
+            )
+            searchItemNode.isFav = true
+        }
+
+    }
+
+    fun cancelFavoriteItem(searchItemNode: SearchItemNode) {
+        thread {
+            favRepository.removeFavItem(searchItemNode.searchItem.docId, searchItemNode.searchItem.lawItem.print())
+            searchItemNode.isFav = false
+        }
+    }
 
 }

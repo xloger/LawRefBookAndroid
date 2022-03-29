@@ -7,7 +7,10 @@ import com.chad.library.adapter.base.entity.node.BaseNode
  * Author: xloger
  * Email:phoenix@xloger.com
  */
-class SearchItemNode(val searchItem: SearchItem) : BaseNode() {
+class SearchItemNode(
+    val searchItem: SearchItem,
+    var isFav: Boolean = false
+    ) : BaseNode() {
     override val childNode: MutableList<BaseNode>?
         get() = null
 

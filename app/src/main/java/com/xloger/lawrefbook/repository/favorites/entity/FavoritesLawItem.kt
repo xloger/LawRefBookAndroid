@@ -2,6 +2,7 @@ package com.xloger.lawrefbook.repository.favorites.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 /**
@@ -9,9 +10,9 @@ import androidx.room.PrimaryKey
  * Author: xloger
  * Email:phoenix@xloger.com
  */
-@Entity(tableName = "fav_item")
+@Entity(tableName = "fav_item", indices = [Index(value = ["doc_id", "content"], unique = true)])
 data class FavoritesLawItem(
-    @PrimaryKey(autoGenerate = true) val uid: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(name = "doc_id") val docId: String,
     @ColumnInfo(name = "content") val content: String,
     @ColumnInfo(name = "timestamp") val timestamp: Long

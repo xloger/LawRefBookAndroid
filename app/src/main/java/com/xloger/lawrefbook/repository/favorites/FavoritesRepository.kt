@@ -15,5 +15,5 @@ class FavoritesRepository(
 
     fun addFavItem(item: FavoritesLawItem) = localDataSource.addFavItem(item)
 
-    fun removeFavItem(item: FavoritesLawItem) = localDataSource.removeFavItem(item)
+    fun removeFavItem(docId: String, content: String) = localDataSource.removeFavItem(docId, content)
 }

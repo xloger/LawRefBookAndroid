@@ -57,7 +57,7 @@ class LawReaderViewModel(
         return list
     }
 
-    fun favItem(docId: String, lawItemNode: LawItemNode) {
+    fun favoriteItem(docId: String, lawItemNode: LawItemNode) {
         val lawItem = lawItemNode.lawItem
         thread {
             favRepository.addFavItem(FavoritesLawItem(
@@ -65,7 +65,15 @@ class LawReaderViewModel(
                 content = lawItem.print(),
                 timestamp = System.currentTimeMillis()
             ))
+            lawItemNode.isFav = true
         }
 
+    }
+
+    fun cancelFavoriteItem(docId: String, lawItemNode: LawItemNode) {
+        thread {
+            favRepository.removeFavItem(docId, lawItemNode.lawItem.print())
+            lawItemNode.isFav = false
+        }
     }
 }

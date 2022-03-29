@@ -100,11 +100,15 @@ class LawReaderFragment : Fragment() {
                 is LawItemNode -> {
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle("操作")
-                        .setItems(listOf<String>("收藏", "复制").toTypedArray(), object : DialogInterface.OnClickListener {
+                        .setItems(listOf<String>(if (entity.isFav) "取消收藏" else "收藏", "复制").toTypedArray(), object : DialogInterface.OnClickListener {
                             override fun onClick(p0: DialogInterface?, p1: Int) {
                                 when(p1) {
                                     0 -> {
-                                        viewModel.favItem(docId!!, entity)
+                                        if (entity.isFav) {
+                                            viewModel.cancelFavoriteItem(docId!!, entity)
+                                        } else {
+                                            viewModel.favoriteItem(docId!!, entity)
+                                        }
                                     }
                                     1 -> {
                                         fun copy(text: String) {

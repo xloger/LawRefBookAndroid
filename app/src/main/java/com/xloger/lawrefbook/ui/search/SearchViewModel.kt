@@ -7,12 +7,15 @@ import com.chad.library.adapter.base.entity.node.BaseNode
 import com.xloger.lawrefbook.repository.book.BookRepository
 import com.xloger.lawrefbook.repository.book.entity.body.Law
 import com.xloger.lawrefbook.repository.book.entity.body.forEachItem
+import com.xloger.lawrefbook.repository.favorites.FavoritesRepository
+import com.xloger.lawrefbook.repository.favorites.entity.FavoritesLawItem
 import com.xloger.lawrefbook.ui.search.entity.SearchItem
 import com.xloger.lawrefbook.ui.search.entity.SearchItemNode
 import kotlin.concurrent.thread
 
 class SearchViewModel(
-    private val bookRepository: BookRepository
+    private val bookRepository: BookRepository,
+    private val favRepository: FavoritesRepository
 ) : ViewModel() {
     private val _searchList = MutableLiveData<Collection<BaseNode>>()
     val searchList: LiveData<Collection<BaseNode>> get() = _searchList
@@ -55,6 +58,28 @@ class SearchViewModel(
             }
         }
         return list
+    }
+
+
+    fun favoriteItem(searchItemNode: SearchItemNode) {
+        thread {
+            favRepository.addFavItem(
+                FavoritesLawItem(
+                docId = searchItemNode.searchItem.docId,
+                content = searchItemNode.searchItem.lawItem.print(),
+                timestamp = System.currentTimeMillis()
+            )
+            )
+            searchItemNode.isFav = true
+        }
+
+    }
+
+    fun cancelFavoriteItem(searchItemNode: SearchItemNode) {
+        thread {
+            favRepository.removeFavItem(searchItemNode.searchItem.docId, searchItemNode.searchItem.lawItem.print())
+            searchItemNode.isFav = false
+        }
     }
 
 }

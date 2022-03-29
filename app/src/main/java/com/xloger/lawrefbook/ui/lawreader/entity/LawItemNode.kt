@@ -8,7 +8,10 @@ import com.xloger.lawrefbook.repository.book.entity.body.Law
  * Author: xloger
  * Email:phoenix@xloger.com
  */
-class LawItemNode(val lawItem: Law.Item) : BaseNode() {
+class LawItemNode(
+    val lawItem: Law.Item,
+    var isFav: Boolean = false
+    ) : BaseNode() {
     override val childNode: MutableList<BaseNode>?
         get() = null
 

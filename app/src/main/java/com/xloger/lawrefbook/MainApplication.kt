@@ -46,7 +46,7 @@ class MainApplication : Application() {
         single { FavoritesRepository(get()) }
         viewModel { LawReaderViewModel(get(), get()) }
         viewModel { PreviewViewModel(get()) }
-        viewModel { SearchViewModel(get()) }
+        viewModel { SearchViewModel(get(), get()) }
         viewModel { FavoritesViewModel(get(), get()) }
 
     }

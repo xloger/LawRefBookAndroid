@@ -63,13 +63,16 @@ class SearchFragment : Fragment() {
                 is SearchItemNode -> {
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle("操作")
-                        .setItems(listOf<String>("收藏", "复制", "跳转原文").toTypedArray(), object : DialogInterface.OnClickListener {
+                        .setItems(listOf<String>(if (entity.isFav) "取消收藏" else "收藏", "复制", "跳转原文").toTypedArray(), object : DialogInterface.OnClickListener {
                             override fun onClick(p0: DialogInterface?, p1: Int) {
                                 val searchItem = entity.searchItem
                                 when(p1) {
                                     0 -> {
-                                        Toast.makeText(requireContext(), "还未支持", Toast.LENGTH_SHORT)
-                                            .show()
+                                        if (entity.isFav) {
+                                            viewModel.cancelFavoriteItem(entity)
+                                        } else {
+                                            viewModel.favoriteItem(entity)
+                                        }
                                     }
                                     1 -> {
                                         fun copy(text: String) {
