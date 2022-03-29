@@ -37,6 +37,7 @@ class LawReaderFragment : Fragment() {
 
     private val docId by lazy { arguments?.getString("docId") }
     private var jumpText: String? = null
+    private var desc: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -99,7 +100,7 @@ class LawReaderFragment : Fragment() {
                 is LawItemNode -> {
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle("操作")
-                        .setItems(listOf<String>("喜欢", "复制").toTypedArray(), object : DialogInterface.OnClickListener {
+                        .setItems(listOf<String>("收藏", "复制").toTypedArray(), object : DialogInterface.OnClickListener {
                             override fun onClick(p0: DialogInterface?, p1: Int) {
                                 when(p1) {
                                     0 -> {
@@ -133,6 +134,10 @@ class LawReaderFragment : Fragment() {
                     lawMenuDialog.show()
                     true
                 }
+                R.id.app_bar_info -> {
+                    showInfoDialog()
+                    true
+                }
                 else -> false
             }
         }
@@ -156,7 +161,8 @@ class LawReaderFragment : Fragment() {
 
     private fun observe() {
         viewModel.law.observe(viewLifecycleOwner) { law ->
-            binding.lawReaderToolBar.title = law.title()
+            binding.lawReaderToolBar.title = law.title
+            desc = law.desc
         }
         viewModel.contentList.observe(viewLifecycleOwner) {
             lawReaderAdapter.setList(it)
@@ -182,6 +188,16 @@ class LawReaderFragment : Fragment() {
         findNavController().navigate(R.id.searchFragment, bundleOf("query" to query, "docId" to docId))
     }
 
+    private fun showInfoDialog() {
+        if (desc.isNullOrBlank()) {
+            Toast.makeText(context, "找不到描述信息", Toast.LENGTH_SHORT).show()
+        }
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("信息")
+            .setMessage(desc)
+            .create()
+            .show()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

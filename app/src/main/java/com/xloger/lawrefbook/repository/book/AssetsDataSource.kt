@@ -7,6 +7,7 @@ import com.xloger.lawrefbook.repository.book.entity.menu.Doc
 import com.xloger.lawrefbook.repository.book.entity.menu.LawData
 import com.xloger.lawrefbook.repository.book.entity.menu.LawRefContainer
 import com.xloger.lawrefbook.repository.book.parser.LawParser
+import com.xloger.lawrefbook.repository.book.parser.LawRegexHelper
 import com.xloger.lawrefbook.util.XLog
 
 /**
@@ -15,7 +16,8 @@ import com.xloger.lawrefbook.util.XLog
  * Email:phoenix@xloger.com
  */
 class AssetsDataSource(
-    private val context: Context
+    context: Context,
+    private val lawRegexHelper: LawRegexHelper
 ) : BookDataSource {
     private val asset = context.assets
     private val baseDirName = "Laws"
@@ -53,7 +55,7 @@ class AssetsDataSource(
     }
 
     override fun getLaw(doc: Doc): Law {
-        val parser = LawParser()
+        val parser = LawParser(lawRegexHelper)
         parser.start()
         try {
             asset.open(doc.path).bufferedReader().forEachLine {

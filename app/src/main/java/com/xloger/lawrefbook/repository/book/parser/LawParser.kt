@@ -1,15 +1,15 @@
 package com.xloger.lawrefbook.repository.book.parser
 
 import com.xloger.lawrefbook.repository.book.entity.body.Law
-import com.xloger.lawrefbook.util.XLog
-import java.util.regex.Pattern
 
 /**
  * Created on 2022/3/21 20:10.
  * Author: xloger
  * Email:phoenix@xloger.com
  */
-class LawParser {
+class LawParser(
+    private val lawRegexHelper: LawRegexHelper
+) {
     private var hLevel = 0
 
     private var baseGroup = Law.Group(0, "", mutableListOf(), mutableListOf())
@@ -44,16 +44,7 @@ class LawParser {
      */
     private fun checkPutItem() {
         if (currentContent.isNotBlank()) {
-            val originText = currentContent.toString().removeSuffix("\n")
-            val matcher = Pattern.compile("(第.+?条)( *)([\\s\\S]*)", Pattern.DOTALL).matcher(originText)
-            val item = if (matcher.find()) {
-                Law.Item(matcher.group(1) ?: "", matcher.group(3) ?: originText)
-            } else {
-                Law.Item("", originText)
-            }
-            if (item.print() != originText) {
-                XLog.e("解析失败：$item，origin:$originText")
-            }
+            val item = lawRegexHelper.parserLawItem(currentContent.toString().removeSuffix("\n"))
             getCurrentGroup(baseGroup, hLevel).itemList.add(item)
             currentContent.clear()
         }

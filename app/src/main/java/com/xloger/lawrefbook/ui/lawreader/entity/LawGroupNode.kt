@@ -18,7 +18,7 @@ class LawGroupNode(
 //        } else {
 //            group.itemList.map { LawItemNode(it) }
 //        }.toMutableList()
-    get() = (group.itemList.map { LawItemNode(it) } + group.groupList.map { LawGroupNode(it) }).toMutableList()
+    get() = (group.itemList.filter { !it.isDesc }.map { LawItemNode(it) } + group.groupList.map { LawGroupNode(it) }).toMutableList()
 
 
 }

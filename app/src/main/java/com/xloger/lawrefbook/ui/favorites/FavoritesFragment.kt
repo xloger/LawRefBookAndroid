@@ -58,7 +58,7 @@ class FavoritesFragment : Fragment() {
                 is SearchItemNode -> {
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle("操作")
-                        .setItems(listOf<String>("喜欢", "复制", "跳转原文").toTypedArray(), object : DialogInterface.OnClickListener {
+                        .setItems(listOf<String>("收藏", "复制", "跳转原文").toTypedArray(), object : DialogInterface.OnClickListener {
                             override fun onClick(p0: DialogInterface?, p1: Int) {
                                 val searchItem = entity.searchItem
                                 when(p1) {

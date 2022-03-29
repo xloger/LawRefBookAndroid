@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.xloger.lawrefbook.repository.book.AssetsDataSource
 import com.xloger.lawrefbook.repository.book.BookDataSource
 import com.xloger.lawrefbook.repository.book.BookRepository
+import com.xloger.lawrefbook.repository.book.parser.LawRegexHelper
 import com.xloger.lawrefbook.repository.favorites.FavLocalDataSource
 import com.xloger.lawrefbook.repository.favorites.FavoritesRepository
 import com.xloger.lawrefbook.repository.favorites.database.AppDatabase
@@ -37,7 +38,8 @@ class MainApplication : Application() {
     }
 
     private val appModule = module {
-        single { AssetsDataSource(get()) } bind BookDataSource::class
+        single { LawRegexHelper() }
+        single { AssetsDataSource(get(), get()) } bind BookDataSource::class
         single { BookRepository(get()) }
         single { Room.databaseBuilder(get(), AppDatabase::class.java, "app-database").build() }
         single { FavLocalDataSource(get()) } bind FavLocalDataSource::class
@@ -45,7 +47,7 @@ class MainApplication : Application() {
         viewModel { LawReaderViewModel(get(), get()) }
         viewModel { PreviewViewModel(get()) }
         viewModel { SearchViewModel(get()) }
-        viewModel { FavoritesViewModel(get()) }
+        viewModel { FavoritesViewModel(get(), get()) }
 
     }
 }

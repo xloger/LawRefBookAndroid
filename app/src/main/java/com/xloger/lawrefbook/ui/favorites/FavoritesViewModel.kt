@@ -4,14 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.chad.library.adapter.base.entity.node.BaseNode
-import com.xloger.lawrefbook.repository.book.entity.body.Law
+import com.xloger.lawrefbook.repository.book.parser.LawRegexHelper
 import com.xloger.lawrefbook.repository.favorites.FavoritesRepository
 import com.xloger.lawrefbook.ui.search.entity.SearchItem
 import com.xloger.lawrefbook.ui.search.entity.SearchItemNode
 import kotlin.concurrent.thread
 
 class FavoritesViewModel(
-    private val favRepository: FavoritesRepository
+    private val favRepository: FavoritesRepository,
+    private val lawRegexHelper: LawRegexHelper
 ) : ViewModel() {
     private val _favItemList = MutableLiveData<Collection<BaseNode>>()
     val favItemList: LiveData<Collection<BaseNode>> get() = _favItemList
@@ -22,7 +23,7 @@ class FavoritesViewModel(
     fun requestFavItemList() {
         thread {
             val allFavItem = favRepository.getAllFavItem()
-            val searchItemNodeList = allFavItem.map { SearchItem(it.docId, Law.Item("", it.content), emptyList() ) }.map { SearchItemNode(it) }
+            val searchItemNodeList = allFavItem.map { SearchItem(it.docId, lawRegexHelper.parserLawItem(it.content), emptyList() ) }.map { SearchItemNode(it) }
             _favItemList.postValue(searchItemNodeList)
         }
     }

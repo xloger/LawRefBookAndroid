@@ -10,9 +10,18 @@ class Law(
     val group: Group,
 ) {
 
-    fun title() = group.groupList.first().title
+    val title by lazy {
+        group.groupList.firstOrNull()?.title ?: ""
+    }
 
-    fun desc() = group.groupList.first().itemList.joinToString("\n") { it.print() }
+    val desc by lazy {
+        val firstItem: Item? = group.groupList.firstOrNull()?.itemList?.firstOrNull()
+        if (firstItem != null && firstItem.isDesc) {
+            firstItem.content.removeSuffix("<!-- INFO END -->")
+        } else {
+            ""
+        }
+    }
 
     data class Group(
         val level: Int,
@@ -26,6 +35,10 @@ class Law(
         val content: String
     ) {
         fun print() = article.let { if (it.isBlank()) "" else "$it " } + content
+
+        val isDesc by lazy {
+            article.isBlank() && content.endsWith("<!-- INFO END -->")
+        }
     }
 }
 
