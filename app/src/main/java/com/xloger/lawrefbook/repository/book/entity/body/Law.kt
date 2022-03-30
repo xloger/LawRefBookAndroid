@@ -66,5 +66,5 @@ fun Law.forEachItem(action: (Law.Item) -> Unit) {
 }
 
 fun Law.forEachItem(groupList: MutableList<Law.Group> = mutableListOf(), action: (Law.Item, groupList: List<Law.Group>) -> Unit) {
-    this.group.forEachItem(mutableListOf(), action)
+    this.group.forEachItem(groupList, action)
 }

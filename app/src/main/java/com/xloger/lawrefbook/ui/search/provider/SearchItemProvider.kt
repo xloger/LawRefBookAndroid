@@ -6,13 +6,13 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.TextAppearanceSpan
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import com.chad.library.adapter.base.entity.node.BaseNode
 import com.chad.library.adapter.base.provider.BaseNodeProvider
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.xloger.lawrefbook.R
 import com.xloger.lawrefbook.ui.search.entity.SearchItemNode
 import com.xloger.lawrefbook.util.gone
+import com.xloger.lawrefbook.util.themeColor
 import com.xloger.lawrefbook.util.visible
 
 
@@ -70,7 +70,7 @@ class SearchItemProvider: BaseNodeProvider() {
             ) {
                 highLightText(spannable, string, endPos)
             }
-            val blueColor = ColorStateList(arrayOf(intArrayOf()), intArrayOf(ContextCompat.getColor(context, R.color.search_key)))
+            val blueColor = ColorStateList(arrayOf(intArrayOf()), intArrayOf(context.themeColor(androidx.appcompat.R.attr.colorPrimary)))
             val highlightSpan = TextAppearanceSpan(null, Typeface.BOLD, -1, blueColor, null)
             spannable.setSpan(highlightSpan, startPos, endPos, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
         }

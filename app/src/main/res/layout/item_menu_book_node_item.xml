@@ -18,8 +18,9 @@
         android:layout_gravity="center"
         android:gravity="center_vertical|start"
         tools:text="标题"
+        android:textColor="?attr/colorOnSurfaceVariant"
         android:textSize="14sp"
-        android:background="@color/bg_preview_item"
+        android:background="?attr/colorSurfaceVariant"
         />
 
     <ImageView
