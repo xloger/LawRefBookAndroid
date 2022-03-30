@@ -47,7 +47,7 @@ class MainApplication : Application() {
         viewModel { LawReaderViewModel(get(), get()) }
         viewModel { PreviewViewModel(get()) }
         viewModel { SearchViewModel(get(), get()) }
-        viewModel { FavoritesViewModel(get(), get()) }
+        viewModel { FavoritesViewModel(get(), get(), get()) }
 
     }
 }

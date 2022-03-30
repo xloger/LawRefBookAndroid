@@ -57,6 +57,7 @@ class SearchFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = searchAdapter
         }
+        searchAdapter.setEmptyView(R.layout.empty_view)
         searchAdapter.setOnItemClickListener { adapter, _, position ->
             val entity = adapter.data[position]
             when(entity) {

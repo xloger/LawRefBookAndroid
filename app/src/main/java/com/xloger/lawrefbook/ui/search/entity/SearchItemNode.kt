@@ -9,7 +9,8 @@ import com.chad.library.adapter.base.entity.node.BaseNode
  */
 class SearchItemNode(
     val searchItem: SearchItem,
-    var isFav: Boolean = false
+    var isFav: Boolean = false,
+    var docName: String = "",
     ) : BaseNode() {
     override val childNode: MutableList<BaseNode>?
         get() = null

@@ -1,5 +1,7 @@
 package com.xloger.lawrefbook.ui.lawreader
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -8,6 +10,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.DecelerateInterpolator
 import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
@@ -22,7 +26,6 @@ import com.xloger.lawrefbook.repository.book.entity.body.Law
 import com.xloger.lawrefbook.ui.lawreader.entity.LawGroupNode
 import com.xloger.lawrefbook.ui.lawreader.entity.LawItemNode
 import com.xloger.lawrefbook.ui.lawreader.weight.lawmenu.LawMenuDialog
-import com.xloger.lawrefbook.util.XLog
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LawReaderFragment : Fragment() {
@@ -79,8 +82,7 @@ class LawReaderFragment : Fragment() {
             listener = object : LawMenuDialog.EventListener {
                 override fun onMenuClick(group: Law.Group) {
                     val index = lawReaderAdapter.data.indexOfFirst { (it as? LawGroupNode)?.group?.title == group.title }
-                    XLog.d("index:$index")
-                    binding.lawRecyclerView.scrollToPosition(index)
+                    jumpPosition(index)
                     dismiss()
                 }
             }
@@ -183,8 +185,53 @@ class LawReaderFragment : Fragment() {
     private fun jumpTextFirst() {
         if (jumpText != null) {
             val jumpNodeIndex = lawReaderAdapter.data.indexOfFirst { it is LawItemNode && it.lawItem.print() == jumpText }
-            binding.lawRecyclerView.scrollToPosition(jumpNodeIndex)
+            jumpPosition(jumpNodeIndex)
             jumpText = null
+        }
+    }
+
+    private fun jumpPosition(position: Int) {
+        binding.lawRecyclerView.apply {
+            scrollToPosition(position)
+            (layoutManager as LinearLayoutManager).scrollToPositionWithOffset(position, 0)
+        }
+//        thread {
+//            Thread.sleep(500)
+//            activity?.runOnUiThread {
+////                    lawReaderAdapter.getViewByPosition(jumpNodeIndex, R.id.law_item_content)?.let {
+////                        playScaleAnimator(it)
+////                    }
+//                val viewHolder =
+//                    binding.lawRecyclerView.findViewHolderForLayoutPosition(position)
+//                viewHolder?.itemView?.apply {
+//                    playScaleAnimator(this)
+//                }
+//            }
+//        }
+    }
+
+    private fun playScaleAnimator(view: View) {
+        val startX = ObjectAnimator.ofFloat(view, "scaleX", 1.1f).apply {
+            setInterpolator(DecelerateInterpolator())
+            duration = 150
+        }
+        val startY = ObjectAnimator.ofFloat(view, "scaleY", 1.1f).apply {
+            setInterpolator(DecelerateInterpolator())
+            duration = 150
+        }
+        val endX = ObjectAnimator.ofFloat(view, "scaleX", 1f).apply {
+            setInterpolator(AccelerateInterpolator())
+            duration = 150
+        }
+        val endY = ObjectAnimator.ofFloat(view, "scaleY", 1f).apply {
+            setInterpolator(AccelerateInterpolator())
+            duration = 150
+        }
+        AnimatorSet().apply {
+            play(startX).with(startY)
+            play(endX).after(startX)
+            play(endX).with(endY)
+            start()
         }
     }
 

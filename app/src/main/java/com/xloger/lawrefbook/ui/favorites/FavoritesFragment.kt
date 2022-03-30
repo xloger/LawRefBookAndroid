@@ -52,22 +52,20 @@ class FavoritesFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = favAdapter
         }
+        favAdapter.setEmptyView(R.layout.empty_view)
         favAdapter.setOnItemClickListener { adapter, _, position ->
             val entity = adapter.data[position]
             when(entity) {
                 is SearchItemNode -> {
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle("操作")
-                        .setItems(listOf<String>(if (entity.isFav) "取消收藏" else "收藏", "复制", "跳转原文").toTypedArray(), object : DialogInterface.OnClickListener {
+                        .setItems(listOf<String>("取消收藏", "复制", "跳转原文").toTypedArray(), object : DialogInterface.OnClickListener {
                             override fun onClick(p0: DialogInterface?, p1: Int) {
                                 val searchItem = entity.searchItem
                                 when(p1) {
                                     0 -> {
-                                        if (entity.isFav) {
-                                            viewModel.cancelFavoriteItem(entity)
-                                        } else {
-                                            viewModel.favoriteItem(entity)
-                                        }
+                                        viewModel.cancelFavoriteItem(entity)
+                                        adapter.notifyItemRemoved(position)
                                     }
                                     1 -> {
                                         fun copy(text: String) {

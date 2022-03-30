@@ -5,12 +5,15 @@ import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.TextAppearanceSpan
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.chad.library.adapter.base.entity.node.BaseNode
 import com.chad.library.adapter.base.provider.BaseNodeProvider
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.xloger.lawrefbook.R
 import com.xloger.lawrefbook.ui.search.entity.SearchItemNode
+import com.xloger.lawrefbook.util.gone
+import com.xloger.lawrefbook.util.visible
 
 
 /**
@@ -40,7 +43,16 @@ class SearchItemProvider: BaseNodeProvider() {
             .map { it.title }
             .filter { it.isNotBlank() }
             .joinToString(" > ")
-        helper.setText(R.id.search_item_menu, "章节：" + menuPrint)
+        val menuTextView = helper.getView<TextView>(R.id.search_item_menu)
+        if (menuPrint.isNotBlank()) {
+            menuTextView.visible()
+            menuTextView.text = "目录：$menuPrint"
+        } else if (entity.docName.isNotBlank()) {
+            menuTextView.visible()
+            menuTextView.text = entity.docName
+        } else {
+            menuTextView.gone()
+        }
     }
 
     /**
