@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
+        style="@style/AppBar"
         >
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/preview_tool_bar"
@@ -18,6 +19,7 @@
             android:layout_height="?attr/actionBarSize"
             app:title="@string/app_name"
             app:menu="@menu/preview_app_bar"
+            style="@style/ToolBar"
             />
     </com.google.android.material.appbar.AppBarLayout>
 

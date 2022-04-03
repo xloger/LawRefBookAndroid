@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppBar">
+<!--        <item name="android:background">?attr/colorPrimary</item>-->
+<!--&lt;!&ndash;        <item name="app:navigationIconTint">?attr/colorOnPrimary</item>&ndash;&gt;-->
+<!--        <item name="android:titleTextColor" tools:ignore="NewApi">?attr/colorOnPrimary</item>-->
+<!--        <item name="android:textColor">?attr/colorOnPrimary</item>-->
+<!--        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Toolbar</item>-->
+
+    </style>
+
+    <style name="ToolBar">
+<!--        <item name="android:background">?attr/colorPrimary</item>-->
+        <!--        <item name="app:navigationIconTint">?attr/colorOnPrimary</item>-->
+<!--        <item name="android:titleTextColor" tools:ignore="NewApi">?attr/colorOnPrimary</item>-->
+<!--        <item name="android:textColor">?attr/colorOnPrimary</item>-->
+<!--        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Toolbar</item>-->
+
+    </style>
+
+    <style name="ThemeOverlay.App.Toolbar" parent="">
+        <item name="colorSurface">?attr/colorPrimary</item>
+        <item name="colorOnSurface">?attr/colorOnPrimary</item>
+    </style>
+</resources>
