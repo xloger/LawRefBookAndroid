@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.about.AboutFragment">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/about_app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        style="@style/AppBar"
+        >
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/about_tool_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+            app:title="关于"
+            style="@style/ToolBar"
+            />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/about_app_bar_layout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            >
+            <TextView
+                style="@style/AboutTitle"
+                android:text="关于法律"
+                />
+            <TextView
+                style="@style/AboutContent"
+                android:text="根据《中华人民共和国著作权法》第五条，本作品不适用于该法。如不受其他法律、法规保护，本作品在中国大陆和其他地区属于公有领域。不适用于《中华人民共和国著作权法》的作品包括：
+\n（一）法律、法规，国家机关的决议、决定、命令和其他具有立法、行政、司法性质的文件，及其官方正式译文；
+\n（二）单纯事实消息；
+\n（三）历法、通用数表、通用表格和公式。
+\n法律内容来源于国家法律法规数据库（https://flk.npc.gov.cn），该项目仅做整合和搜索等功能，如果您在使用过程中发现部分法条有误，或不完整，请联系开发者进行修改。"
+                />
+            <TextView
+                style="@style/AboutTitle"
+                android:text="关于应用"
+                />
+            <TextView
+                style="@style/AboutContent"
+                android:text="该应用的初衷是易于使用、无广告、无隐私权限。
+\n法律条文来源于 @RanKKI 的辛苦整理：https://github.com/LawRefBook/Laws。包括整个项目也是由他发起，我只是做了一下 Android 端的适配。"
+                />
+
+            <TextView
+                style="@style/AboutContent"
+                android:text="当前版本：V***"
+                />
+            <TextView
+                style="@style/AboutContent"
+                android:text="检查更新"
+                />
+            <TextView
+                style="@style/AboutTitle"
+                android:text="关于 Android 版的后续迭代"
+                />
+            <TextView
+                style="@style/AboutContent"
+                android:text="因为国内厂商应用市场的申请麻烦与资质要求，暂时只在 Github 上与 Google Play 上更新，后续有机会上架国内厂商应用市场。
+\nAndroid 版有许多我已知的体验上的问题可以优化，但考虑到大部分用户首先追求的是可用性，就先出一版功能完成度比较高的。
+\n应用权限我一个都没申请，什么读取应用列表、读取剪切板都是国内 ROM 自创的。"
+                />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

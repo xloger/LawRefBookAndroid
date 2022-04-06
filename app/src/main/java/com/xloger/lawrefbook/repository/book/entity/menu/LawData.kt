@@ -12,6 +12,7 @@ class LawData : ArrayList<LawData.LawDataItem>(){
         val category: String,
         val folder: String,
         val id: String,
+        val isSubFolder: Boolean?,
         val laws: List<Law>,
         val links: List<String>?
     ) {

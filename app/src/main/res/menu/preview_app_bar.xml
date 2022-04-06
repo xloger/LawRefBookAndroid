@@ -16,5 +16,10 @@
         android:title="收藏"
         app:showAsAction="ifRoom"
         />
-
+    <item
+        android:id="@+id/app_bar_about"
+        android:icon="@drawable/ic_baseline_info_24"
+        android:title="关于"
+        app:showAsAction="collapseActionView"
+        />
 </menu>

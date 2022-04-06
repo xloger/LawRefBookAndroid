@@ -9,6 +9,7 @@ import com.xloger.lawrefbook.repository.book.parser.LawRegexHelper
 import com.xloger.lawrefbook.repository.favorites.FavLocalDataSource
 import com.xloger.lawrefbook.repository.favorites.FavoritesRepository
 import com.xloger.lawrefbook.repository.favorites.database.AppDatabase
+import com.xloger.lawrefbook.ui.about.AboutViewModel
 import com.xloger.lawrefbook.ui.favorites.FavoritesViewModel
 import com.xloger.lawrefbook.ui.lawreader.LawReaderViewModel
 import com.xloger.lawrefbook.ui.preview.PreviewViewModel
@@ -48,6 +49,7 @@ class MainApplication : Application() {
         viewModel { PreviewViewModel(get()) }
         viewModel { SearchViewModel(get(), get()) }
         viewModel { FavoritesViewModel(get(), get(), get()) }
+        viewModel { AboutViewModel() }
 
     }
 }

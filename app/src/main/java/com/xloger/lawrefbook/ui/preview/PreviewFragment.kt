@@ -72,6 +72,10 @@ class PreviewFragment : Fragment() {
                     findNavController().navigate(R.id.favoritesFragment)
                     true
                 }
+                R.id.app_bar_about -> {
+                    findNavController().navigate(R.id.aboutFragment)
+                    true
+                }
                 else -> false
             }
         }

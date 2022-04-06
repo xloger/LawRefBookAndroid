@@ -50,4 +50,9 @@
 
     </fragment>
 
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.xloger.lawrefbook.ui.about.AboutFragment"
+        />
+
 </navigation>
