@@ -2,6 +2,7 @@ package com.xloger.lawrefbook.util
 
 import android.content.Context
 import android.content.res.Resources
+import android.text.Spannable
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
@@ -51,3 +52,16 @@ fun View.visibleOrInvisible(isVisible: Boolean) {
 fun Context.themeColor(@AttrRes attrRes: Int): Int = TypedValue()
     .apply { theme.resolveAttribute (attrRes, this, true) }
     .data
+
+
+fun Spannable.customStyle(spannable: Spannable, content: String, start: Int, styleText: String, styleBlock: () -> Any) {
+    if (content.isBlank()) return
+    val startPos: Int = start + content.substring(start).indexOf(styleText)
+    if (startPos > -1) {
+        val endPos: Int = startPos + styleText.length
+        if (content.substring(endPos).contains(styleText)) {
+            customStyle(this, content, endPos, styleText, styleBlock)
+        }
+        spannable.setSpan(styleBlock(), startPos, endPos, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+    }
+}

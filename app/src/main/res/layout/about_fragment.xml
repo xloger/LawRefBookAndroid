@@ -40,6 +40,7 @@
                 android:text="关于法律"
                 />
             <TextView
+                android:id="@+id/about_law_content"
                 style="@style/AboutContent"
                 android:text="根据《中华人民共和国著作权法》第五条，本作品不适用于该法。如不受其他法律、法规保护，本作品在中国大陆和其他地区属于公有领域。不适用于《中华人民共和国著作权法》的作品包括：
 \n（一）法律、法规，国家机关的决议、决定、命令和其他具有立法、行政、司法性质的文件，及其官方正式译文；
@@ -52,17 +53,25 @@
                 android:text="关于应用"
                 />
             <TextView
+                android:id="@+id/about_app_content"
                 style="@style/AboutContent"
                 android:text="该应用的初衷是易于使用、无广告、无隐私权限。
 \n法律条文来源于 @RanKKI 的辛苦整理：https://github.com/LawRefBook/Laws。包括整个项目也是由他发起，我只是做了一下 Android 端的适配。"
                 />
 
             <TextView
+                android:id="@+id/about_version"
                 style="@style/AboutContent"
+                android:layout_marginVertical="8dp"
+                android:textSize="18sp"
                 android:text="当前版本：V***"
                 />
             <TextView
+                android:id="@+id/about_check_update"
                 style="@style/AboutContent"
+                android:layout_marginVertical="8dp"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="18sp"
                 android:text="检查更新"
                 />
             <TextView
@@ -70,10 +79,10 @@
                 android:text="关于 Android 版的后续迭代"
                 />
             <TextView
+                android:id="@+id/about_update_content"
                 style="@style/AboutContent"
                 android:text="因为国内厂商应用市场的申请麻烦与资质要求，暂时只在 Github 上与 Google Play 上更新，后续有机会上架国内厂商应用市场。
-\nAndroid 版有许多我已知的体验上的问题可以优化，但考虑到大部分用户首先追求的是可用性，就先出一版功能完成度比较高的。
-\n应用权限我一个都没申请，什么读取应用列表、读取剪切板都是国内 ROM 自创的。"
+\nAndroid 版有许多我已知的优化点，但考虑到大部分用户首先追求可用，就先出一版功能完成度比较高的，之后有建议可以通过 Issue 反馈。"
                 />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

@@ -13,7 +13,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:drawableTop="@drawable/ic_baseline_hourglass_empty_24"
-        android:text="没有数据"
+        android:text="没有数据或加载中"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
