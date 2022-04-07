@@ -42,6 +42,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
+        app:backgroundTint="?attr/colorPrimary"
+        app:rippleColor="?attr/colorOnPrimary"
         android:src="@drawable/ic_baseline_menu_24"
         />
 

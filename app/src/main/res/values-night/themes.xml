@@ -29,5 +29,7 @@
 <!--        <item name="colorInversePrimary">@color/md_theme_dark_inversePrimary</item>-->
 <!--        <item name="colorShadow">@color/md_theme_dark_shadow</item>-->
         <item name="colorPrimaryInverse">@color/md_theme_dark_primaryInverse</item>
+
+        <item name="colorControlNormal">@color/md_theme_dark_onPrimary</item>
     </style>
 </resources>
