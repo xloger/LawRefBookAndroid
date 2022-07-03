@@ -1,6 +1,10 @@
 package com.xloger.lawrefbook.repository.book.entity.menu
 
 import androidx.room.*
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
+import com.xloger.lawrefbook.util.XLog
+import java.util.*
 
 /**
  * Created on 2022/5/5 21:24.
@@ -36,11 +40,18 @@ class LawDataDb {
         @ColumnInfo val level: String,
         @ColumnInfo val name: String,
         @ColumnInfo(name = "filename") val fileName: String?,
-        @ColumnInfo(typeAffinity = 1) val publish: Long? = null,
+        @ColumnInfo() val publish: Date? = null,
         @ColumnInfo val expired: Int,
         @ColumnInfo(name = "category_id") val categoryId: Int,
         @ColumnInfo val order: Int?,
         @ColumnInfo(name = "subtitle") val subTitle: String?,
-        @ColumnInfo(name = "valid_from", typeAffinity = 1) val validFrom: Long? = null
+        @ColumnInfo(name = "valid_from") val validFrom: Date? = null
     )
+}
+
+class LawDataMjigration : Migration(0, 2) {
+    override fun migrate(database: SupportSQLiteDatabase) {
+        XLog.e("start migrate")
+    }
+
 }

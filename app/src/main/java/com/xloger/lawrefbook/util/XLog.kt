@@ -13,7 +13,7 @@ object XLog {
         Log.d("lrb", msg)
     }
 
-    fun e(exception: Exception) {
+    fun e(exception: Throwable) {
         Log.e("lrb", exception.toString())
     }
 

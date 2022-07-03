@@ -7,9 +7,11 @@ import com.xloger.lawrefbook.repository.book.database.LawDatabase
 import com.xloger.lawrefbook.repository.book.entity.body.Law
 import com.xloger.lawrefbook.repository.book.entity.menu.Doc
 import com.xloger.lawrefbook.repository.book.entity.menu.LawData
+import com.xloger.lawrefbook.repository.book.entity.menu.LawDataMjigration
 import com.xloger.lawrefbook.repository.book.entity.menu.LawRefContainer
 import com.xloger.lawrefbook.repository.book.parser.LawParser
 import com.xloger.lawrefbook.repository.book.parser.LawRegexHelper
+import com.xloger.lawrefbook.repository.book.sqlite.LawDbHelper
 import com.xloger.lawrefbook.util.XLog
 import kotlin.concurrent.thread
 
@@ -26,7 +28,7 @@ class AssetsDataSource(
     private val baseDirName = "Laws"
 
     override fun getLawRefContainer(): LawRefContainer {
-        return parseDB()
+        return parseDbBySqlite()
     }
 
     private fun parseJson(): LawRefContainer {
@@ -61,15 +63,30 @@ class AssetsDataSource(
         return LawRefContainer(groupList)
     }
 
+    /**
+     * 该方法因为 ROOM 无法映射 DATE 类型，废弃
+     */
+    @Deprecated("该方法因为 ROOM 无法映射 DATE 类型，废弃")
     private fun parseDB(): LawRefContainer {
         val groupList = mutableListOf<LawRefContainer.Group>()
         val lawDatabase = Room.databaseBuilder(context, LawDatabase::class.java, "Sample.db")
             .createFromAsset("Laws/db.sqlite3")
+            .addMigrations(LawDataMjigration())
+            .fallbackToDestructiveMigration()
             .build()
         thread {
             val category = lawDatabase.lawDao().getCategory()
             XLog.d(category.toString())
         }
+
+
+        return LawRefContainer(groupList)
+    }
+
+    private fun parseDbBySqlite(): LawRefContainer {
+        val groupList = mutableListOf<LawRefContainer.Group>()
+        val dbHelper = LawDbHelper(context)
+        dbHelper.getTest()
 
 
         return LawRefContainer(groupList)
