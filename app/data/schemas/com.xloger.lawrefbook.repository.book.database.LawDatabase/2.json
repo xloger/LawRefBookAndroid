@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "b7c3841c4dfe5858e1f2223f2dcb6be4",
+    "identityHash": "3ca17b9809a25d350eb35b21f0753692",
     "entities": [
       {
         "tableName": "category",
@@ -56,7 +56,7 @@
       },
       {
         "tableName": "law",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `level` TEXT NOT NULL, `name` TEXT NOT NULL, `filename` TEXT, `publish` INTEGER, `expired` INTEGER NOT NULL, `category_id` INTEGER NOT NULL, `order` INTEGER, `subtitle` TEXT, `valid_from` INTEGER, PRIMARY KEY(`id`), FOREIGN KEY(`category_id`) REFERENCES `category`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `level` TEXT NOT NULL, `name` TEXT NOT NULL, `filename` TEXT, `publish` TEXT, `expired` INTEGER NOT NULL, `category_id` INTEGER NOT NULL, `order` INTEGER, `subtitle` TEXT, `valid_from` TEXT, PRIMARY KEY(`id`), FOREIGN KEY(`category_id`) REFERENCES `category`(`id`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "id",
@@ -85,7 +85,7 @@
           {
             "fieldPath": "publish",
             "columnName": "publish",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": false
           },
           {
@@ -115,7 +115,7 @@
           {
             "fieldPath": "validFrom",
             "columnName": "valid_from",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": false
           }
         ],
@@ -173,7 +173,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b7c3841c4dfe5858e1f2223f2dcb6be4')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3ca17b9809a25d350eb35b21f0753692')"
     ]
   }
 }

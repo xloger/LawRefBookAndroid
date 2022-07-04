@@ -86,8 +86,10 @@ class AssetsDataSource(
     private fun parseDbBySqlite(): LawRefContainer {
         val groupList = mutableListOf<LawRefContainer.Group>()
         val dbHelper = LawDbHelper(context)
-        dbHelper.getTest()
-
+        val categoryList = dbHelper.getCategory()
+        XLog.d(categoryList.toString())
+        val lawList = dbHelper.getLaw()
+        XLog.d(lawList.toString())
 
         return LawRefContainer(groupList)
     }
