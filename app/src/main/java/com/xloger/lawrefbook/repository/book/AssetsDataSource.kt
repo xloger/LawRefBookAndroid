@@ -5,10 +5,7 @@ import androidx.room.Room
 import com.google.gson.Gson
 import com.xloger.lawrefbook.repository.book.database.LawDatabase
 import com.xloger.lawrefbook.repository.book.entity.body.Law
-import com.xloger.lawrefbook.repository.book.entity.menu.Doc
-import com.xloger.lawrefbook.repository.book.entity.menu.LawData
-import com.xloger.lawrefbook.repository.book.entity.menu.LawDataMjigration
-import com.xloger.lawrefbook.repository.book.entity.menu.LawRefContainer
+import com.xloger.lawrefbook.repository.book.entity.menu.*
 import com.xloger.lawrefbook.repository.book.parser.LawParser
 import com.xloger.lawrefbook.repository.book.parser.LawRegexHelper
 import com.xloger.lawrefbook.repository.book.sqlite.LawDbHelper
@@ -89,9 +86,42 @@ class AssetsDataSource(
         val categoryList = dbHelper.getCategory()
         XLog.d(categoryList.toString())
         val lawList = dbHelper.getLaw()
-        XLog.d(lawList.toString())
+        lawList.forEach {
+            XLog.d(it.toString())
+        }
+        lawList.groupBy { it.categoryId }.map { (categoryId, lawList) ->
+            val group = categoryList.first { it.id == categoryId }
+            val docList = lawList.map { lawTran(group.name, it) }
+            LawRefContainer.Group(
+                id = group.id.toString(),
+                category = group.name,
+                folder = group.folder,
+                links = emptyList(),
+                docList = docList
+            )
+        }.run {
+            groupList.addAll(this)
+        }
 
         return LawRefContainer(groupList)
+    }
+
+    private fun lawTran(folder: String, lawData: LawDataDb.Law) : Doc {
+        return lawData.run {
+            val path = when {
+                publish != null -> "$baseDirName/${folder}/${fileName ?: name}($publish).md"
+                else -> "$baseDirName/${folder}/${fileName ?: name}.md"
+            }
+            Doc(
+                name = name,
+                fileName = fileName ?: name,
+                id = id,
+                level = level,
+                path = path,
+                links = emptyList(),
+                tags = emptyList()
+            )
+        }
     }
 
     override fun getLaw(doc: Doc): Law {

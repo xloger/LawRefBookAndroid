@@ -65,7 +65,6 @@ class LawDbHelper(val context: Context): SQLiteOpenHelper(context, Name, null, V
             val cursor = rawQuery("SELECT * FROM category", null)
             cursor.moveToFirst()
             do {
-                XLog.d(cursor.getString(1))
                 cursor.run {
                     val id = getInt(0)
                     val name = getString(1)
