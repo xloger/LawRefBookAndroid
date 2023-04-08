@@ -12,8 +12,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:drawableTop="@drawable/baseline_search_off_24"
-        android:text="没有符合条件的结果"
+        android:drawableTop="@drawable/ic_baseline_hourglass_empty_24"
+        android:text="加载中..."
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

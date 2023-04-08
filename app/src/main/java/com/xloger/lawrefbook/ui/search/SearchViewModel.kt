@@ -1,8 +1,7 @@
 package com.xloger.lawrefbook.ui.search
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.chad.library.adapter.base.entity.node.BaseNode
 import com.xloger.lawrefbook.repository.book.BookRepository
 import com.xloger.lawrefbook.repository.book.entity.body.Law
@@ -11,42 +10,48 @@ import com.xloger.lawrefbook.repository.favorites.FavoritesRepository
 import com.xloger.lawrefbook.repository.favorites.entity.FavoritesLawItem
 import com.xloger.lawrefbook.ui.search.entity.SearchItem
 import com.xloger.lawrefbook.ui.search.entity.SearchItemNode
+import com.xloger.lawrefbook.ui.search.entity.SearchUiState
+import com.xloger.lawrefbook.util.XLog
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import kotlin.concurrent.thread
 
 class SearchViewModel(
     private val bookRepository: BookRepository,
     private val favRepository: FavoritesRepository
 ) : ViewModel() {
-    private val _searchList = MutableLiveData<Collection<BaseNode>>()
-    val searchList: LiveData<Collection<BaseNode>> get() = _searchList
 
-    private val _errorMsg = MutableLiveData<String>()
-    val errorMsg: LiveData<String> get() = _errorMsg
+    private val _uiState = MutableStateFlow<SearchUiState>(SearchUiState.Default)
+    val uiState get() = _uiState.asStateFlow()
 
     fun searchSingle(query: String, docId: String) {
-        thread {
+        viewModelScope.launch(context = Dispatchers.IO) {
+            _uiState.emit(SearchUiState.Querying(docId))
             val result = bookRepository.getLawByDocId(docId)
-            val law = if (result.isSuccess) {
-                result.getOrThrow()
-            } else {
-                _errorMsg.postValue(result.exceptionOrNull()?.message)
-                return@thread
+            val law = result.getOrElse {
+                _uiState.emit(SearchUiState.Error(it))
+                return@launch
             }
-            _searchList.postValue(tranSearchLaw(docId, law, query))
+            _uiState.emit(SearchUiState.Success(tranSearchLaw(docId, law, query)))
         }
-
     }
 
     fun searchAll(query: String) {
-        thread {
+        viewModelScope.launch(context = Dispatchers.IO) {
             val list = mutableListOf<BaseNode>()
             bookRepository.getLawRefContainer().groupList.forEach {
                 it.docList.forEach { doc ->
-                    val law = bookRepository.getSingleLaw(doc)
+                    _uiState.emit(SearchUiState.Querying(doc.name))
+                    val law = bookRepository.getLawByDocId(doc.id).getOrElse {
+                        XLog.e("搜索异常：$it")
+                        return@forEach
+                    }
                     list.addAll(tranSearchLaw(doc.id, law, query))
                 }
             }
-            _searchList.postValue(list)
+            _uiState.emit(SearchUiState.Success(list))
         }
     }
 

@@ -11,12 +11,18 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.xloger.lawrefbook.R
 import com.xloger.lawrefbook.databinding.SearchFragmentBinding
 import com.xloger.lawrefbook.ui.search.entity.SearchItemNode
+import com.xloger.lawrefbook.ui.search.entity.SearchUiState
+import com.xloger.lawrefbook.util.XLog
+import com.xloger.lawrefbook.util.gone
+import com.xloger.lawrefbook.util.visible
+import kotlinx.coroutines.flow.collect
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
@@ -57,7 +63,7 @@ class SearchFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = searchAdapter
         }
-        searchAdapter.setEmptyView(R.layout.empty_view)
+        searchAdapter.setEmptyView(R.layout.loading_view)
         searchAdapter.setOnItemClickListener { adapter, _, position ->
             val entity = adapter.data[position]
             when(entity) {
@@ -104,12 +110,34 @@ class SearchFragment : Fragment() {
     }
 
     private fun observe() {
-        viewModel.searchList.observe(viewLifecycleOwner) {
-            searchAdapter.setList(it)
+        lifecycleScope.launchWhenResumed {
+            viewModel.uiState.collect {
+                XLog.d("uiState: $it")
+                when(it) {
+                    is SearchUiState.Default -> {
+                        binding.searchText.gone()
+                    }
+                    is SearchUiState.Querying -> {
+                        binding.searchText.visible()
+                        binding.searchText.text = "正在搜索：${it.queryDoc}"
+                    }
+                    is SearchUiState.Success -> {
+                        binding.searchText.gone()
+//                        binding.searchText.text = "搜索结果：${it.list.size}条"
+                        binding.searchToolBar.title = "搜索：${arguments?.getString("query")} - ${it.list.size}条"
+                        searchAdapter.setList(it.list)
+                        if (it.list.isEmpty()) {
+                            searchAdapter.setEmptyView(R.layout.empty_view)
+                        }
+                    }
+                    is SearchUiState.Error -> {
+                        binding.searchText.gone()
+                        Toast.makeText(requireContext(), "${it.msg}", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
-        viewModel.errorMsg.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), "$it", Toast.LENGTH_SHORT).show()
-        }
+
     }
 
 
