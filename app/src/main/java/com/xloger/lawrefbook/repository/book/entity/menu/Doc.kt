@@ -14,7 +14,7 @@ package com.xloger.lawrefbook.repository.book.entity.menu
  */
 data class Doc(
     val name: String,
-    val fileName: String,
+    val fileName: String?,
     val id: String,
     val level: String,
     val path: String,

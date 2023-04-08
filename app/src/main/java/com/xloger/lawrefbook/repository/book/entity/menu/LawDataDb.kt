@@ -25,26 +25,15 @@ class LawDataDb {
      */
     @Entity(tableName = "category")
     data class Category(
-        @PrimaryKey val id: Int,
-        @ColumnInfo val name: String,
-        @ColumnInfo val folder: String,
-        @ColumnInfo val isSubFolder: Int,
-        @ColumnInfo val group: String?,
-        @ColumnInfo val order: Int?
+        val id: Int,
+        val name: String,
+        val folder: String,
+        val isSubFolder: Int,
+        val group: String?,
+        val order: Int?
     )
 
-    @Entity(tableName = "law",
-        foreignKeys = arrayOf(ForeignKey(
-            entity = Category::class,
-            parentColumns = arrayOf("id"),
-            childColumns = arrayOf("category_id")
-        )),
-        indices = [
-            Index(name = "law_category_id", value = ["category_id"], unique = false),
-            Index(name = "law_name", value = ["name"], unique = false),
-            Index(name = "index_law_category_id_name", value = ["category_id", "name"], unique = false),
-        ],
-    )
+
     /**
      * 对应 `Laws/db.sqlite3` 中的 `law` 表
      * @param id 法律法规的 UUID
@@ -60,16 +49,16 @@ class LawDataDb {
      * @param ver 版本号。
      */
     data class Law(
-        @PrimaryKey val id: String,
-        @ColumnInfo val level: String,
-        @ColumnInfo val name: String,
-        @ColumnInfo(name = "filename") val fileName: String?,
-        @ColumnInfo() val publish: String? = null,
-        @ColumnInfo val expired: Int,
-        @ColumnInfo(name = "category_id") val categoryId: Int,
-        @ColumnInfo val order: Int?,
-        @ColumnInfo(name = "subtitle") val subTitle: String?,
-        @ColumnInfo(name = "valid_from") val validFrom: String? = null
+        val id: String,
+        val level: String,
+        val name: String,
+        val fileName: String?,
+        val publish: String? = null,
+        val expired: Int,
+        val categoryId: Int,
+        val order: Int?,
+        val subTitle: String?,
+        val validFrom: String? = null
     )
 }
 

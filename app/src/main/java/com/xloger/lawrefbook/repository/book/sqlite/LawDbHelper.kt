@@ -66,12 +66,12 @@ class LawDbHelper(val context: Context): SQLiteOpenHelper(context, Name, null, V
             cursor.moveToFirst()
             do {
                 cursor.run {
-                    val id = getInt(0)
-                    val name = getString(1)
-                    val folder = getString(3)
-                    val isSubFolder = getInt(4)
-                    val group = getStringOrNull(5)
-                    val order = getIntOrNull(6)
+                    val id = getInt(cursor.getColumnIndexOrThrow("id"))
+                    val name = getString(cursor.getColumnIndexOrThrow("name"))
+                    val folder = getString(cursor.getColumnIndexOrThrow("folder"))
+                    val isSubFolder = getInt(cursor.getColumnIndexOrThrow("isSubFolder"))
+                    val group = getStringOrNull(cursor.getColumnIndexOrThrow("group"))
+                    val order = getIntOrNull(cursor.getColumnIndexOrThrow("order"))
                     list.add(LawDataDb.Category(id, name, folder, isSubFolder, group, order))
                 }
             } while (cursor.moveToNext())
@@ -88,16 +88,16 @@ class LawDbHelper(val context: Context): SQLiteOpenHelper(context, Name, null, V
             cursor.moveToFirst()
             do {
                 cursor.run {
-                    val id = getString(0)
-                    val level = getString(1)
-                    val name = getString(2)
-                    val fileName = getStringOrNull(3)
-                    val publish = getStringOrNull(4)
-                    val expired = getInt(5)
-                    val categoryId = getInt(6)
-                    val order = getIntOrNull(7)
-                    val subTitle = getStringOrNull(8)
-                    val validFrom = getStringOrNull(9)
+                    val id = getString(cursor.getColumnIndexOrThrow("id"))
+                    val level = getString(cursor.getColumnIndexOrThrow("level"))
+                    val name = getString(cursor.getColumnIndexOrThrow("name"))
+                    val fileName = getStringOrNull(cursor.getColumnIndexOrThrow("filename"))
+                    val publish = getStringOrNull(cursor.getColumnIndexOrThrow("publish")).let { if (it.isNullOrBlank() == true) null else it }
+                    val expired = getInt(cursor.getColumnIndexOrThrow("expired"))
+                    val categoryId = getInt(cursor.getColumnIndexOrThrow("category_id"))
+                    val order = getIntOrNull(cursor.getColumnIndexOrThrow("order"))
+                    val subTitle = getStringOrNull(cursor.getColumnIndexOrThrow("subtitle"))
+                    val validFrom = getStringOrNull(cursor.getColumnIndexOrThrow("valid_from"))
                     list.add(LawDataDb.Law(id, level, name, fileName, publish, expired, categoryId, order, subTitle, validFrom))
                 }
             } while (cursor.moveToNext())

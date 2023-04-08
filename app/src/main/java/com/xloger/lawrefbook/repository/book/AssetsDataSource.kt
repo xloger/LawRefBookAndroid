@@ -34,7 +34,7 @@ class AssetsDataSource(
         //将所有法律文件按 categoryId 分组，再按组添加。
         lawList.groupBy { it.categoryId }.map { (categoryId, lawList) ->
             val group = categoryList.first { it.id == categoryId }
-            val docList = lawList.map { lawTran(group.name, it) }
+            val docList = lawList.map { lawTran(group.folder, it) }
             LawRefContainer.Group(
                 id = group.id.toString(),
                 category = group.name,
@@ -56,12 +56,14 @@ class AssetsDataSource(
     private fun lawTran(folder: String, lawData: LawDataDb.Law) : Doc {
         return lawData.run {
             val path = when {
-                publish != null -> "$baseDirName/${folder}/${fileName ?: name}($publish).md"
-                else -> "$baseDirName/${folder}/${fileName ?: name}.md"
+                subTitle != null -> "$baseDirName/${folder}/${subTitle}.md"
+                fileName != null -> "$baseDirName/${folder}/${fileName}.md"
+                publish != null -> "$baseDirName/${folder}/${name}($publish).md"
+                else -> "$baseDirName/${folder}/${name}.md"
             }
             Doc(
                 name = name,
-                fileName = fileName ?: name,
+                fileName = fileName,
                 id = id,
                 level = level,
                 path = path,
@@ -70,6 +72,9 @@ class AssetsDataSource(
         }
     }
 
+    /**
+     * 根据目录信息得到真实文件内容
+     */
     override fun getLaw(doc: Doc): Law {
         val parser = LawParser(lawRegexHelper)
         parser.start()
@@ -84,6 +89,9 @@ class AssetsDataSource(
         return parser.endAndGet()
     }
 
+    /**
+     * 根据目录信息得到其原始文本
+     */
     override fun getOriginText(doc: Doc): String {
         return asset.open(doc.path).bufferedReader().use { it.readText() }
     }
