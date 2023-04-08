@@ -13,6 +13,10 @@ class GroupNode(
     val group: LawRefContainer.Group,
     val itemList: List<ItemNode>
 ) : BaseExpandNode() {
+    init {
+        isExpanded = false
+    }
+
     override val childNode: MutableList<BaseNode>?
         get() = itemList.toMutableList()
 

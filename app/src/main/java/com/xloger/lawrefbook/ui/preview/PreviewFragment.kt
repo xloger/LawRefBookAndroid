@@ -25,16 +25,14 @@ class PreviewFragment : Fragment() {
     private var _binding: PreviewFragmentBinding? = null
     private val binding get() = _binding!!
 
-
     private val menuAdapter by lazy { BookMenuAdapter() }
-
 
     private val viewModel: PreviewViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = PreviewFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -99,6 +97,7 @@ class PreviewFragment : Fragment() {
 
     private fun observe() {
         viewModel.lawRefContainer.observe(viewLifecycleOwner) {
+            if (menuAdapter.data.isNotEmpty()) return@observe
             menuAdapter.setList(tranContainer(it))
         }
     }

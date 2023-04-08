@@ -71,7 +71,7 @@ class LawDbHelper(val context: Context): SQLiteOpenHelper(context, Name, null, V
                     val folder = getString(cursor.getColumnIndexOrThrow("folder"))
                     val isSubFolder = getInt(cursor.getColumnIndexOrThrow("isSubFolder"))
                     val group = getStringOrNull(cursor.getColumnIndexOrThrow("group"))
-                    val order = getIntOrNull(cursor.getColumnIndexOrThrow("order"))
+                    val order = getInt(cursor.getColumnIndexOrThrow("order"))
                     list.add(LawDataDb.Category(id, name, folder, isSubFolder, group, order))
                 }
             } while (cursor.moveToNext())

@@ -34,14 +34,15 @@ class AssetsDataSource(
         //将所有法律文件按 categoryId 分组，再按组添加。
         lawList.groupBy { it.categoryId }.map { (categoryId, lawList) ->
             val group = categoryList.first { it.id == categoryId }
-            val docList = lawList.map { lawTran(group.folder, it) }
+            val docList = lawList.map { lawTran(group.folder, it) }.sortedBy { it.order }
             LawRefContainer.Group(
                 id = group.id.toString(),
                 category = group.name,
                 folder = group.folder,
-                docList = docList
+                docList = docList,
+                order = group.order
             )
-        }.run {
+        }.sortedBy { it.order }.run {
             groupList.addAll(this)
         }
 
@@ -67,6 +68,7 @@ class AssetsDataSource(
                 id = id,
                 level = level,
                 path = path,
+                order = order,
                 tags = emptyList()
             )
         }

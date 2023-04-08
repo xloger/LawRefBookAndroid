@@ -19,7 +19,8 @@ data class LawRefContainer(val groupList: List<Group>) {
         val id: String,
         val category: String,
         val folder: String,
-        val docList: List<Doc>
+        val docList: List<Doc>,
+        val order: Int
     ) {
         override fun toString(): String {
             return "Group(id='$id', category='$category', folder='$folder', docList=${docList.map { it.name }})"

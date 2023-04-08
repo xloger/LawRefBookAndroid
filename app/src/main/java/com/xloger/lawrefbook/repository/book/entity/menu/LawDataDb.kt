@@ -30,7 +30,7 @@ class LawDataDb {
         val folder: String,
         val isSubFolder: Int,
         val group: String?,
-        val order: Int?
+        val order: Int
     )
 
 

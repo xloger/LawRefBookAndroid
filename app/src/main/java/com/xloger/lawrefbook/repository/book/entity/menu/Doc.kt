@@ -18,6 +18,7 @@ data class Doc(
     val id: String,
     val level: String,
     val path: String,
+    val order: Int?,
     val tags: Collection<Tag>
 ) {
 
