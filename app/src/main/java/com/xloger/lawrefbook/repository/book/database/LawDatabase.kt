@@ -12,6 +12,7 @@ import com.xloger.lawrefbook.repository.book.entity.menu.LawDataDb
  * Author: xloger
  * Email:phoenix@xloger.com
  */
+@Deprecated("该类因为 ROOM 无法映射 DATE 类型，废弃")
 @Database(entities = [LawDataDb.Category::class, LawDataDb.Law::class], version = 2)
 @TypeConverters(DateConverter::class)
 abstract class LawDatabase: RoomDatabase() {

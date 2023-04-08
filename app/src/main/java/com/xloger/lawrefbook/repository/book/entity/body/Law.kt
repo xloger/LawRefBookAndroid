@@ -5,6 +5,7 @@ package com.xloger.lawrefbook.repository.book.entity.body
  * Created on 2022/3/21 20:12.
  * Author: xloger
  * Email:phoenix@xloger.com
+ * 一个法律法规文件解析后的数据模型
  */
 class Law(
     val group: Group,

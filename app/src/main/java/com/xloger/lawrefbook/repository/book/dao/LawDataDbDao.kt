@@ -9,6 +9,7 @@ import com.xloger.lawrefbook.repository.book.entity.menu.LawDataDb
  * Author: xloger
  * Email:phoenix@xloger.com
  */
+@Deprecated("该类因为 ROOM 无法映射 DATE 类型，废弃")
 @Dao
 interface LawDataDbDao {
 

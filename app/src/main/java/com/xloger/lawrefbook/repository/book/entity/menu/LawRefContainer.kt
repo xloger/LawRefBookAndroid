@@ -8,12 +8,27 @@ package com.xloger.lawrefbook.repository.book.entity.menu
  */
 data class LawRefContainer(val groupList: List<Group>) {
 
-
+    /**
+     * 一组目录信息
+     * @param id 该组目录的id
+     * @param category 该组目录所属的分类
+     * @param docList 包含的法律法规文件列表
+     */
     data class Group(
         val id: String,
         val category: String,
         val folder: String,
         val links: List<String>,
         val docList: List<Doc>
-    )
+    ) {
+        override fun toString(): String {
+            return "Group(id='$id', category='$category', folder='$folder', links=$links, docList=${docList.map { it.name }})"
+        }
+    }
+
+    override fun toString(): String {
+        return "LawRefContainer(groupList=${groupList.joinToString("\n")})"
+    }
+
+
 }

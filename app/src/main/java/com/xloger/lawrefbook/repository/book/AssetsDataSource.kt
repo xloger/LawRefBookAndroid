@@ -68,7 +68,7 @@ class AssetsDataSource(
         val groupList = mutableListOf<LawRefContainer.Group>()
         val lawDatabase = Room.databaseBuilder(context, LawDatabase::class.java, "Sample.db")
             .createFromAsset("Laws/db.sqlite3")
-            .addMigrations(LawDataMjigration())
+            .addMigrations(LawDataMigration())
             .fallbackToDestructiveMigration()
             .build()
         thread {
@@ -84,7 +84,7 @@ class AssetsDataSource(
         val groupList = mutableListOf<LawRefContainer.Group>()
         val dbHelper = LawDbHelper(context)
         val categoryList = dbHelper.getCategory()
-        XLog.d(categoryList.toString())
+//        XLog.d(categoryList.toString())
         val lawList = dbHelper.getLaw()
         lawList.forEach {
             XLog.d(it.toString())
