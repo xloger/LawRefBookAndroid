@@ -14,6 +14,7 @@ import java.io.FileOutputStream
  * Created on 2022/7/3 23:19.
  * Author: xloger
  * Email:phoenix@xloger.com
+ * Tip:SQLiteDatabase 不支持打开 assets 中的数据库，只能复制到 data/data/包名/files/ 目录下
  */
 class LawDbHelper(val context: Context): SQLiteOpenHelper(context, Name, null, Version) {
     private val AssetsPath = "Laws/db.sqlite3"
@@ -22,12 +23,12 @@ class LawDbHelper(val context: Context): SQLiteOpenHelper(context, Name, null, V
     private var db: SQLiteDatabase? = null
 
     init {
-        val isExist = checkDatabase() //TODO 未考虑更新的情况
-        if (isExist) {
-
-        } else {
-            createDatabase()
-        }
+//        val isExist = checkDatabase() //TODO 未考虑更新的情况
+//        if (!isExist) {
+//            createDatabase()
+//        }
+        //TODO 将来根据版本号判断是否更新吧
+        createDatabase()
     }
 
     private fun checkDatabase() : Boolean {
@@ -60,7 +61,6 @@ class LawDbHelper(val context: Context): SQLiteOpenHelper(context, Name, null, V
     fun getCategory(): List<LawDataDb.Category> {
         val list = mutableListOf<LawDataDb.Category>()
         openDatabase()
-        XLog.d("start")
         db?.run {
             val cursor = rawQuery("SELECT * FROM category", null)
             cursor.moveToFirst()
@@ -76,7 +76,6 @@ class LawDbHelper(val context: Context): SQLiteOpenHelper(context, Name, null, V
                 }
             } while (cursor.moveToNext())
         }
-        XLog.d("end")
         close()
         return list
     }
@@ -84,7 +83,6 @@ class LawDbHelper(val context: Context): SQLiteOpenHelper(context, Name, null, V
     fun getLaw(): List<LawDataDb.Law> {
         val list = mutableListOf<LawDataDb.Law>()
         openDatabase()
-        XLog.d("start")
         db?.run {
             val cursor = rawQuery("SELECT * FROM law", null)
             cursor.moveToFirst()
@@ -104,7 +102,6 @@ class LawDbHelper(val context: Context): SQLiteOpenHelper(context, Name, null, V
                 }
             } while (cursor.moveToNext())
         }
-        XLog.d("end")
         close()
         return list
     }
