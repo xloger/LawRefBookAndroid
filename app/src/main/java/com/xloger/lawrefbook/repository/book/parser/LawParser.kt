@@ -52,6 +52,7 @@ class LawParser(
 
     fun endAndGet() : Law {
         fixOriginText()
+        checkPutItem()
         return Law(baseGroup)
     }
 

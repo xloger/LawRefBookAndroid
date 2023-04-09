@@ -4,10 +4,14 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.xloger.lawrefbook.MainApplication
 import com.xloger.lawrefbook.repository.book.BookRepository
 import com.xloger.lawrefbook.repository.book.entity.menu.LawRefContainer
 import com.xloger.lawrefbook.util.XLog
-import org.koin.mp.KoinPlatformTools
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PreviewViewModel(
     private val bookRepository: BookRepository
@@ -17,9 +21,13 @@ class PreviewViewModel(
     val lawRefContainer: LiveData<LawRefContainer> = _lawRefContainer
 
     fun requestLawRefContainer() {
-        val container = bookRepository.getLawRefContainer()
-//        checkLawRefContainerContentRight(container)
-        _lawRefContainer.postValue(container)
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val container = bookRepository.getLawRefContainer()
+//                checkLawRefContainerContentRight(container)
+                _lawRefContainer.postValue(container)
+            }
+        }
     }
 
     /**
@@ -27,7 +35,7 @@ class PreviewViewModel(
      * 【因为单测的环境配置有点问题，临时在这里写一个测试方法。。。
      */
     private fun checkLawRefContainerPathRight(container: LawRefContainer) {
-        val assetManager = KoinPlatformTools.defaultContext().get().get<Context>().assets
+        val assetManager = MainApplication.koin.get<Context>().assets
         var errorNum = 0
         container.groupList.forEach { group ->
             group.docList.forEach { doc ->

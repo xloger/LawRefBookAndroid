@@ -20,6 +20,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.bind
 import org.koin.dsl.module
+import org.koin.mp.KoinPlatformTools
 
 /**
  * Created on 2022/3/26 19:46.
@@ -51,5 +52,9 @@ class MainApplication : Application() {
         viewModel { FavoritesViewModel(get(), get(), get()) }
         viewModel { AboutViewModel() }
 
+    }
+
+    companion object {
+        val koin by lazy { KoinPlatformTools.defaultContext().get() }
     }
 }

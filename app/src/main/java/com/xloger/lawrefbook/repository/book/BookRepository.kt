@@ -10,7 +10,8 @@ import com.xloger.lawrefbook.repository.book.entity.menu.LawRefContainer
  * Email:phoenix@xloger.com
  */
 class BookRepository(
-    val localDataSource: BookDataSource
+    val localDataSource: BookDataSource,
+    private val isCacheLaw: Boolean = true
 ) {
     private var cacheLawRefContainer: LawRefContainer? = null
     private var cacheGroupMap = mutableMapOf<String, LawRefContainer.Group>()
@@ -22,6 +23,8 @@ class BookRepository(
     }
 
     fun getSingleLaw(doc: Doc): Law {
+        if (!isCacheLaw) return localDataSource.getLaw(doc)
+
         if (cacheLawMap.containsKey(doc)) return cacheLawMap[doc]!!
         return localDataSource.getLaw(doc).also {
             cacheLawMap[doc] = it
