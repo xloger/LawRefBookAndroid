@@ -15,13 +15,17 @@ class BookRepository(
     private var cacheLawRefContainer: LawRefContainer? = null
     private var cacheGroupMap = mutableMapOf<String, LawRefContainer.Group>()
     private var cacheDocMap = mutableMapOf<String, Doc>()
+    private var cacheLawMap = mutableMapOf<Doc, Law>()
 
     fun getSingleDoc(doc: Doc) : String {
         return localDataSource.getOriginText(doc)
     }
 
     fun getSingleLaw(doc: Doc): Law {
-        return localDataSource.getLaw(doc)
+        if (cacheLawMap.containsKey(doc)) return cacheLawMap[doc]!!
+        return localDataSource.getLaw(doc).also {
+            cacheLawMap[doc] = it
+        }
     }
 
     fun getDoc(docId: String): Doc? {

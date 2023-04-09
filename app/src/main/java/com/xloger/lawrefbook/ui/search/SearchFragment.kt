@@ -19,7 +19,6 @@ import com.xloger.lawrefbook.R
 import com.xloger.lawrefbook.databinding.SearchFragmentBinding
 import com.xloger.lawrefbook.ui.search.entity.SearchItemNode
 import com.xloger.lawrefbook.ui.search.entity.SearchUiState
-import com.xloger.lawrefbook.util.XLog
 import com.xloger.lawrefbook.util.gone
 import com.xloger.lawrefbook.util.visible
 import kotlinx.coroutines.flow.collect
@@ -112,7 +111,7 @@ class SearchFragment : Fragment() {
     private fun observe() {
         lifecycleScope.launchWhenResumed {
             viewModel.uiState.collect {
-                XLog.d("uiState: $it")
+//                XLog.d("uiState: $it")
                 when(it) {
                     is SearchUiState.Default -> {
                         binding.searchText.gone()

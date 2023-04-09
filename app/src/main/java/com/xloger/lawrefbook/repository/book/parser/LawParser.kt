@@ -51,7 +51,20 @@ class LawParser(
     }
 
     fun endAndGet() : Law {
+        fixOriginText()
         return Law(baseGroup)
+    }
+
+    /**
+     * 兼容那些没有按照 MD 格式和对应规范发文档。
+     */
+    private fun fixOriginText() {
+        val controlGroup = if (baseGroup.groupList.isEmpty()) baseGroup else baseGroup.groupList.last()
+        if (controlGroup.groupList.isEmpty() && controlGroup.itemList.isEmpty() && currentContent.isNotBlank()) {
+            currentContent.split("\n").forEach {
+                controlGroup.itemList.add(lawRegexHelper.parserLawItem(it))
+            }
+        }
     }
 
     fun getCurrentGroup(group: Law.Group, level: Int): Law.Group {

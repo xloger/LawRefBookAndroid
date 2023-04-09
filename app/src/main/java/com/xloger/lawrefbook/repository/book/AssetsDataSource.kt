@@ -57,6 +57,7 @@ class AssetsDataSource(
     private fun lawTran(folder: String, lawData: LawDataDb.Law) : Doc {
         return lawData.run {
             val path = when {
+                folder == "刑法" -> "$baseDirName/${folder}/${name}.md"
                 subTitle != null -> "$baseDirName/${folder}/${subTitle}.md"
                 fileName != null -> "$baseDirName/${folder}/${fileName}.md"
                 publish != null -> "$baseDirName/${folder}/${name}($publish).md"
