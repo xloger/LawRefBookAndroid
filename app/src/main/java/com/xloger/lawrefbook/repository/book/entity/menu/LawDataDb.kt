@@ -25,7 +25,7 @@ class LawDataDb {
      */
     @Entity(tableName = "category")
     data class Category(
-        val id: Int,
+        val id: String,
         val name: String,
         val folder: String,
         val isSubFolder: Int,
@@ -55,7 +55,7 @@ class LawDataDb {
         val fileName: String?,
         val publish: String? = null,
         val expired: Int,
-        val categoryId: Int,
+        val categoryId: String,
         val order: Int?,
         val subTitle: String?,
         val validFrom: String? = null

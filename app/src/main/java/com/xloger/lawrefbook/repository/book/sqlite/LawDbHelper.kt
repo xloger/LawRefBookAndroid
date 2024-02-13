@@ -66,7 +66,7 @@ class LawDbHelper(val context: Context): SQLiteOpenHelper(context, Name, null, V
             cursor.moveToFirst()
             do {
                 cursor.run {
-                    val id = getInt(cursor.getColumnIndexOrThrow("id"))
+                    val id = getString(cursor.getColumnIndexOrThrow("id"))
                     val name = getString(cursor.getColumnIndexOrThrow("name"))
                     val folder = getString(cursor.getColumnIndexOrThrow("folder"))
                     val isSubFolder = getInt(cursor.getColumnIndexOrThrow("isSubFolder"))
@@ -94,7 +94,7 @@ class LawDbHelper(val context: Context): SQLiteOpenHelper(context, Name, null, V
                     val fileName = getStringOrNull(cursor.getColumnIndexOrThrow("filename"))
                     val publish = getStringOrNull(cursor.getColumnIndexOrThrow("publish")).let { if (it.isNullOrBlank() == true) null else it }
                     val expired = getInt(cursor.getColumnIndexOrThrow("expired"))
-                    val categoryId = getInt(cursor.getColumnIndexOrThrow("category_id"))
+                    val categoryId = getString(cursor.getColumnIndexOrThrow("category_id"))
                     val order = getIntOrNull(cursor.getColumnIndexOrThrow("order"))
                     val subTitle = getStringOrNull(cursor.getColumnIndexOrThrow("subtitle"))
                     val validFrom = getStringOrNull(cursor.getColumnIndexOrThrow("valid_from"))
